@@ -5,7 +5,12 @@ import {
   HomeIcon,
   DocumentDuplicateIcon,
   ClipboardDocumentListIcon,
-  SquaresPlusIcon
+  SquaresPlusIcon,
+  RectangleStackIcon,
+  RectangleGroupIcon,
+  TruckIcon,
+  TableCellsIcon,
+  UsersIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -14,12 +19,37 @@ import clsx from 'clsx';
 // Depending on the size of the application, this would be stored in a database.
 const links = [
   { name: 'Home', href: '/ui/dashboard', icon: HomeIcon },
+  { name: 'Boxes', href: '/ui/dashboard/boxes', icon: SquaresPlusIcon },
   {
-    name: 'Inventory',
+    name: 'Category',
+    href: '/ui/dashboard/inventory',
+    icon: RectangleStackIcon,
+  },
+  {
+    name: 'Product',
+    href: '/ui/dashboard/inventory',
+    icon: RectangleGroupIcon,
+  },
+  {
+    name: 'Purchases',
     href: '/ui/dashboard/inventory',
     icon: ClipboardDocumentListIcon,
   },
-  { name: 'Boxes', href: '/ui/dashboard/boxes', icon: SquaresPlusIcon },
+  {
+    name: 'Shipping',
+    href: '/ui/dashboard/inventory',
+    icon: TruckIcon,
+  },
+  {
+    name: 'Sales',
+    href: '/ui/dashboard/inventory',
+    icon: TableCellsIcon,
+  },
+  {
+    name: 'Users',
+    href: '/ui/dashboard/inventory',
+    icon: UsersIcon,
+  },
 ];
 
 export default function NavLinks() {
@@ -33,9 +63,9 @@ export default function NavLinks() {
             key={link.name}
             href={link.href}
              className={clsx(
-              'flex h-[48px] grow items-center justify-center gap-2 rounded-sm bg-gray-50 p-3 text-sm font-medium hover:bg-slate-200 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
+              'flex h-[30px] grow items-center justify-center gap-2 rounded-sm bg-gray-50 p-3 text-sm font-small hover:bg-slate-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
               {
-                'bg-slate-200 text-blue-600': pathname === link.href,
+                'bg-slate-100 text-blue-600': pathname === link.href,
               },
             )}
             >
