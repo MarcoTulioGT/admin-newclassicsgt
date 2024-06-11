@@ -21,6 +21,16 @@ export const formatDateToLocal = (
   return formatter.format(date);
 };
 
+export const formatDateGT = (
+  dateStr: string,
+  locale: string = 'fr-CA',
+) => {
+  const date = new Date(dateStr);
+  const formatter = new Intl.DateTimeFormat(locale).format(date);
+  console.log(formatter)
+  return formatter
+};
+
 export const generateYAxis = (revenue: Revenue[]) => {
   // Calculate what labels we need to display on the y-axis
   // based on highest record and in 1000s

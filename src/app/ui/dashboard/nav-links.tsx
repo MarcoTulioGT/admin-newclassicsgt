@@ -10,7 +10,8 @@ import {
   RectangleGroupIcon,
   TruckIcon,
   TableCellsIcon,
-  UsersIcon
+  UsersIcon,
+  AdjustmentsHorizontalIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -44,6 +45,11 @@ const links = [
     name: 'Sales',
     href: '/ui/dashboard/inventory',
     icon: TableCellsIcon,
+  },
+  {
+    name: 'Settings',
+    href: '/ui/dashboard/inventory',
+    icon: AdjustmentsHorizontalIcon,
   },
   {
     name: 'Users',

@@ -57,7 +57,7 @@ export default async function BoxesTable({
                   Status
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
-                  Delivery Date
+                  Delivered Date
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
@@ -69,19 +69,19 @@ export default async function BoxesTable({
                 <tr
                   key={box.id}
                   className="w-full border py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg hover:bg-gray-50">
-                  <td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-500">
+                  <td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-300">
                     {box.box_id}
                   </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-500">
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                     {formatCurrency(box.cost)}
                   </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-500">
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                     <BoxStatus status={box.status} />
                   </td>
-                  <td className="whitespace-nowrap   px-3 py-1 hover:border hover:border-blue-500">
+                  <td className="whitespace-nowrap   px-3 py-1 hover:border hover:border-blue-300">
                     {formatDateToLocal(box.delivery_date)}
                   </td>
-                  <td className="whitespace-nowrap py-1 pl-6 pr-3 hover:border hover:border-blue-500">
+                  <td className="whitespace-nowrap py-1 pl-6 pr-3 hover:border hover:border-blue-300">
                     <div className="flex justify-end gap-1">
                      <UpdateBox id={box.id} />
                       <DeleteBox id={box.id} />

@@ -7,7 +7,7 @@ export function CreateBox() {
       href="/ui/dashboard/boxes/create"
       className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
     >
-      <span className="hidden md:block">Create Invoice</span>{' '}
+      <span className="hidden md:block">Create Box</span>{' '}
       <PlusIcon className="h-5 md:ml-4" />
     </Link>
   );
@@ -25,7 +25,6 @@ export function UpdateBox({ id }: { id: string }) {
 }
 
 export function DeleteBox({ id }: { id: string }) {
-  console.log(id)
   const deleteBoxWithId = deleteBox.bind(null, id);
   return (
     <>

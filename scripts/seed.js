@@ -7,9 +7,9 @@ CREATE TABLE IF NOT EXISTS boxes (
 
 
     INSERT INTO boxes (box_id, cost, status, delivery_date)
-        VALUES ( 'box_08062024', 330, 'pending', '2024-06-07')
+        VALUES ( 'box_08062024', 330, 'filling', '2024-06-07')
         ON CONFLICT (id) DO NOTHING;
 
         INSERT INTO boxes (box_id, cost, status)
-        VALUES ( 'box_01092024', 36000, 'pending')
+        VALUES ( 'box_01092024', 36000, 'filling')
         ON CONFLICT (id) DO NOTHING;

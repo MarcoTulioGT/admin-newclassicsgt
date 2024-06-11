@@ -1,6 +1,7 @@
 'use client';
 
-import { BoxField, BoxForm } from '@/app/lib/definitions';
+import { CustomerField } from '@/app/lib/definitions';
+import Link from 'next/link';
 import {
   CheckIcon,
   ClockIcon,
@@ -11,27 +12,17 @@ import {
   BanknotesIcon,
   ArchiveBoxArrowDownIcon
 } from '@heroicons/react/24/outline';
-import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import { updateBox } from '@/app/lib/actions';
+import { createBox } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
-import { formatDateToLocal, formatDateGT } from '@/app/lib/utils';
 
-
-export default function EditBoxForm({
-  box,
-  customers,
-}: {
-  box: BoxForm;
-  boxes: BoxField[];
-}) {
+export default function Form({ }) {
+  
+  
   
   
   const initialState = { message: null, errors: {} };
-  const updateBoxWithId = updateBox.bind(null, box.id);
-  const [state, dispatch] = useFormState(updateBoxWithId, initialState);
-
-  
+  const [state, dispatch] = useFormState(createBox, initialState);
   return (
     <form action={dispatch}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -48,7 +39,6 @@ export default function EditBoxForm({
                 name="cost"
                 type="number"
                 step="0.01"
-                defaultValue={box.cost}
                 placeholder="Enter USD cost"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="cost-error"
@@ -66,6 +56,7 @@ export default function EditBoxForm({
           </div>
         </div>
 
+
             {/* Box DeliveryDate */}
             <div className="mb-4">
           <label htmlFor="cost" className="mb-2 block text-sm font-medium">
@@ -77,7 +68,6 @@ export default function EditBoxForm({
                 id="delivery_date"
                 name="delivery_date"
                 type="date"
-                defaultValue={formatDateGT(box.delivery_date)}
                 placeholder="Enter date"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="delivery_date-error"
@@ -96,7 +86,8 @@ export default function EditBoxForm({
         </div>
 
 
-        {/* Box Status */}
+
+       {/* Box Status */}
         <fieldset>
           <legend className="mb-2 block text-sm font-medium">
             Set the box status
@@ -109,7 +100,7 @@ export default function EditBoxForm({
                   name="status"
                   type="radio"
                   value="filling"
-                  defaultChecked={box.status === 'filling'}
+                  defaultChecked="filling"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -125,7 +116,6 @@ export default function EditBoxForm({
                   name="status"
                   type="radio"
                   value="paid"
-                  defaultChecked={box.status === 'paid'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -141,8 +131,7 @@ export default function EditBoxForm({
                   name="status"
                   type="radio"
                   value="intransit"
-                  defaultChecked={box.status === 'intransit'}
-                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
                   htmlFor="intransit"
@@ -157,7 +146,6 @@ export default function EditBoxForm({
                   name="status"
                   type="radio"
                   value="delivered"
-                  defaultChecked={box.status === 'delivered'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -179,13 +167,12 @@ export default function EditBoxForm({
           </div>
         </fieldset>
 
+      
         <div aria-live="polite" aria-atomic="true">
           {state.message ? (
             <p className="mt-2 text-sm text-red-500">{state.message}</p>
           ) : null}
         </div>
-
-        
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
@@ -194,7 +181,7 @@ export default function EditBoxForm({
         >
           Cancel
         </Link>
-        <Button type="submit">Edit Box</Button>
+        <Button type="submit" >Create Box</Button>
       </div>
     </form>
   );

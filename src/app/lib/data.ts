@@ -44,6 +44,27 @@ export async function fetchFilteredBoxes(
   }
 }
 
+export async function fetchBoxesPages(query: string) {
+  noStore();
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM boxes
+    WHERE
+      boxes.box_id ILIKE ${`%${query}%`} OR
+      boxes.cost::text ILIKE ${`%${query}%`} OR
+      boxes.status ILIKE ${`%${query}%`} OR
+      boxes.delivery_date::text ILIKE ${`%${query}%`}
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of boxes.');
+  }
+}
+
+
 export async function fetchBoxById(id: string) {
   noStore();
   try {
@@ -64,7 +85,6 @@ export async function fetchBoxById(id: string) {
       cost: box.cost / 100,
     }));
     
-    console.log(box); 
     return box[0];
   } catch (error) {
     console.error('Database Error:', error);

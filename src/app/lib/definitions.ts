@@ -21,7 +21,7 @@ export type User = {
     box_id: string;
     delivery_date: string;
     cost: number;
-    status: 'pending' | 'paid' | 'inprogress' | 'delivery';
+    status: 'filling' | 'paid' | 'intransit' | 'delivered';
   };
   
   export type Revenue = {
@@ -47,7 +47,7 @@ export type User = {
     box_id: string;
     delivery_date: string;
     cost: number;
-    status: 'pending' | 'paid' | 'inprogress' | 'delivery';
+    status: 'filling' | 'paid' | 'intransit' | 'delivered';
   };
   
   export type CustomersTableType = {
@@ -56,7 +56,7 @@ export type User = {
     email: string;
     image_url: string;
     total_invoices: number;
-    total_pending: number;
+    total_filling: number;
     total_paid: number;
   };
   
@@ -66,7 +66,7 @@ export type User = {
     email: string;
     image_url: string;
     total_invoices: number;
-    total_pending: string;
+    total_filling: string;
     total_paid: string;
   };
   
@@ -78,7 +78,8 @@ export type User = {
   export type BoxForm = {
     id: string;
     box_id: string;
+    delivery_date: string; 
     cost: number;
-    status: 'pending' | 'paid' | 'inprogress' | 'delivery';
+    status: 'filling' | 'paid' | 'intransit' | 'delivered';
   };
   
