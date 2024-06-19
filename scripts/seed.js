@@ -10,6 +10,9 @@ CREATE TABLE IF NOT EXISTS boxes (
         VALUES ( 'box_08062024', 330, 'filling', '2024-06-07')
         ON CONFLICT (id) DO NOTHING;
 
-        INSERT INTO boxes (box_id, cost, status)
-        VALUES ( 'box_01092024', 36000, 'filling')
-        ON CONFLICT (id) DO NOTHING;
+    INSERT INTO boxes (box_id, cost, status)
+    VALUES ( 'box_01092024', 36000, 'filling')
+    ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO users (id, name, email, password)
+    VALUES ('', '', '', '')
