@@ -10,7 +10,7 @@ import {
   import { fetchCardData } from '@/app/lib/data';
 
   const iconMap = {
-    collected: BanknotesIcon,
+    paid: BanknotesIcon,
     boxesdelivered: ArchiveBoxArrowDownIcon,
     pending: ClockIcon,
     boxes: ArchiveBoxIcon,
@@ -28,7 +28,7 @@ import {
       <>
         {/* NOTE: comment in this code when you get to this point in the course */}
   
-         <Card title="Collected" value={totalPaidCost} type="collected" />
+         <Card title="Paid" value={totalPaidCost} type="paid" />
         <Card title="Pending" value={totalPendingCost} type="pending" />
         <Card title="Total Boxes" value={numberOfBoxes} type="boxes" />
         <Card
@@ -47,7 +47,7 @@ import {
   }: {
     title: string;
     value: number | string;
-    type: 'boxes' | 'boxesdelivered' | 'pending' | 'collected';
+    type: 'boxes' | 'boxesdelivered' | 'pending' | 'paid';
   }) {
     const Icon = iconMap[type];
   

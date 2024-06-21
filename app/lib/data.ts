@@ -22,10 +22,15 @@ export async function fetchRevenue() {
     console.log('Fetching revenue data...');
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const data = await sql<Revenue>`SELECT * FROM revenue`;
-
-    console.log('Data fetch completed after 3 seconds.');
-
+    const data = await sql<Revenue>`select *
+    from(
+    select sum(cost) cost, TO_CHAR(delivery_date, 'Monthyyyy') AS month,  delivery_date
+    from boxes
+    where  delivery_date >= CURRENT_DATE-360
+    group by TO_CHAR(delivery_date, 'Monthyyyy') , delivery_date
+    )
+    order by delivery_date  asc `;
+ 
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
@@ -38,11 +43,12 @@ export async function fetchLatestBoxes() {
   try {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     const data = await sql<LatestInvoiceRaw>`
-      SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id
-      FROM invoices
-      JOIN customers ON invoices.customer_id = customers.id
-      ORDER BY invoices.date DESC
-      LIMIT 5`;
+    select cost, box_id, status, id
+    from boxes
+    ORDER BY delivery_date DESC
+    LIMIT 5`;
+
+
 
     const latestInvoices = data.rows.map((invoice) => ({
       ...invoice,
