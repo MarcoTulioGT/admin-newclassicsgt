@@ -20,7 +20,7 @@ import { formatDateToLocal, formatDateGT } from '@/app/lib/utils';
 
 export default function EditBoxForm({
   box,
-  customers,
+  boxes,
 }: {
   box: BoxForm;
   boxes: BoxField[];

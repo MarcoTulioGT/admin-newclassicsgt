@@ -19,42 +19,49 @@ import clsx from 'clsx';
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: 'Home', href: '/ui/dashboard', icon: HomeIcon },
-  { name: 'Boxes', href: '/ui/dashboard/boxes', icon: SquaresPlusIcon },
+  { name: 'Home', href: '/ui/dashboard', icon: HomeIcon, mobile: true,  },
+  { name: 'Boxes', href: '/ui/dashboard/boxes', icon: SquaresPlusIcon, mobile: false, },
   {
-    name: 'Category',
-    href: '/ui/dashboard/inventory',
+    name: 'Categories',
+    href: '/ui/dashboard/categories',
     icon: RectangleStackIcon,
+    mobile: false,
   },
   {
     name: 'Product',
-    href: '/ui/dashboard/inventory',
+    href: '/ui/dashboard/products',
     icon: RectangleGroupIcon,
+    mobile: false,
   },
   {
     name: 'Purchases',
-    href: '/ui/dashboard/inventory',
+    href: '/ui/dashboard/purchases',
     icon: ClipboardDocumentListIcon,
+    mobile: false,
   },
   {
     name: 'Shipping',
-    href: '/ui/dashboard/inventory',
+    href: '/ui/dashboard/shippings',
     icon: TruckIcon,
+    mobile: true,
   },
   {
     name: 'Sales',
-    href: '/ui/dashboard/inventory',
+    href: '/ui/dashboard/sales',
     icon: TableCellsIcon,
+    mobile: true,
   },
   {
     name: 'Settings',
-    href: '/ui/dashboard/inventory',
+    href: '/ui/dashboard/settings',
     icon: AdjustmentsHorizontalIcon,
+    mobile: true,
   },
   {
     name: 'Users',
-    href: '/ui/dashboard/inventory',
+    href: '/ui/dashboard/users',
     icon: UsersIcon,
+    mobile: false,
   },
 ];
 
@@ -69,6 +76,9 @@ export default function NavLinks() {
             key={link.name}
             href={link.href}
              className={clsx(
+              {
+                'max-sm:hidden': link.mobile === false,
+              },
               'flex h-[30px] grow items-center justify-center gap-2 rounded-sm bg-gray-50 p-3 text-sm font-small hover:bg-slate-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
               {
                 'bg-slate-100 text-blue-600': pathname === link.href,

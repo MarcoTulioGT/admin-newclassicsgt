@@ -9,12 +9,7 @@ export type User = {
     password: string;
   };
   
-  export type Customer = {
-    id: string;
-    name: string;
-    email: string;
-    image_url: string;
-  };
+
   
   export type Box = {
     id: string;
@@ -29,7 +24,7 @@ export type User = {
     cost: number;
   };
   
-  export type LatestInvoice = {
+  export type LatestBox = {
     id: string;
     box_id: string;
     status: string;
@@ -37,7 +32,7 @@ export type User = {
   };
   
   // The database returns a number for amount, but we later format it to a string with the formatCurrency function
-  export type LatestInvoiceRaw = Omit<LatestInvoice, 'cost'> & {
+  export type LatestBoxRaw = Omit<LatestBox, 'cost'> & {
     cost: number;
   };
   
@@ -49,30 +44,27 @@ export type User = {
     status: 'filling' | 'paid' | 'intransit' | 'delivered';
   };
   
-  export type CustomersTableType = {
+  export type CategoriesTable = {
     id: string;
     name: string;
-    email: string;
-    image_url: string;
-    total_invoices: number;
-    total_filling: number;
-    total_paid: number;
-  };
-  
-  export type FormattedCustomersTable = {
-    id: string;
-    name: string;
-    email: string;
-    image_url: string;
-    total_invoices: number;
-    total_filling: string;
-    total_paid: string;
-  };
-  
+    description: string;
+    status: string;
+    ordenno: number;
+    parentid: :string;
+    picture: string;
+    create_date: string;
+  }
+
   export type BoxField = {
     id: string;
     box_id: string;
   };
+  
+
+  export type CategoriesField = {
+    id: string;
+    name: string;
+  }
   
   export type BoxForm = {
     id: string;

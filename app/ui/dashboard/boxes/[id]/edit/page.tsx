@@ -10,7 +10,7 @@ export const metadata: Metadata = {
  
 export default async function Page({ params }: { params: { id: string } }) {
     const id = params.id;
-    const [box, customers] = await Promise.all([fetchBoxById(id), fetchBoxes(),]);
+    const [box, boxes] = await Promise.all([fetchBoxById(id), fetchBoxes(),]);
       if (!box) {
         notFound();
       }
@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           },
         ]}
       />
-      <Form box={box} customers={customers} />
+      <Form box={box} boxes={boxes} />
     </main>
   );
 }

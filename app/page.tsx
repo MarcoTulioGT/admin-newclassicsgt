@@ -8,8 +8,8 @@ import Image from 'next/image';
 
 export default function Page() {
   return (
-    <main className="flex min-h-screen flex-col">
-      <div className="flex h-20 shrink-0 items-end rounded-sm bg-black p-4 md:h-28">
+    <main className="flex min-h-screen flex-col ">
+      <div className="flex h-20 shrink-0 rounded-sm bg-black p-4 md:h-28">
         {/* ... */}
         <AcmeLogo size={"text-[40px]"} color={"text-slate-300"}/> 
       </div>

@@ -1,10 +1,11 @@
 import { sql } from '@vercel/postgres';
 import {
+  CategoriesField,
   BoxField,
-  CustomersTableType,
-  InvoiceForm,
+  BoxForm,
   BoxesTable,
-  LatestInvoiceRaw,
+  CategoriesTable,
+  LatestBoxRaw,
   User,
   Revenue,
 } from './definitions';
@@ -42,7 +43,7 @@ export async function fetchLatestBoxes() {
   noStore();
   try {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    const data = await sql<LatestInvoiceRaw>`
+    const data = await sql<LatestBoxRaw>`
     select cost, box_id, status, id
     from boxes
     ORDER BY delivery_date DESC
@@ -50,14 +51,14 @@ export async function fetchLatestBoxes() {
 
 
 
-    const latestInvoices = data.rows.map((invoice) => ({
-      ...invoice,
-      amount: formatCurrency(invoice.amount),
+    const latestBoxes = data.rows.map((box) => ({
+      ...box,
+      amount: formatCurrency(box.amount),
     }));
-    return latestInvoices;
+    return latestBoxes;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch the latest invoices.');
+    throw new Error('Failed to fetch the latest boxes.');
   }
 }
 
@@ -97,6 +98,7 @@ export async function fetchCardData() {
   }
 }
 
+
 const ITEMS_PER_PAGE = 10;
 export async function fetchFilteredBoxes(
   query: string,
@@ -121,13 +123,48 @@ export async function fetchFilteredBoxes(
       ORDER BY boxes.delivery_date DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
-
+    console.log(boxes.rows)
     return boxes.rows;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch boxes.');
   }
 }
+
+
+export async function fetchFilteredCategories(
+  query: string,
+  currentPage: number,
+ ) {
+  noStore();
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  try {
+    const categories = await sql<CategoriesTable>`
+      SELECT
+      categories.id,
+      categories.name,
+      categories.description,
+      categories.status,
+      categories.ordenno,
+      categories.parentid,
+      categories.picture,
+      categories.create_date
+      FROM categories
+      WHERE
+      categories.name ILIKE ${`%${query}%`} OR
+      categories.status::TEXT ILIKE ${`%${query}%`} OR
+      categories.create_date::text ILIKE ${`%${query}%`} 
+      ORDER BY categories.create_date DESC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `;
+    console.log(categories.rows)
+    return categories.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch categories.');
+  }
+}
+
 
 export async function fetchBoxesPages(query: string) {
   noStore();
@@ -153,7 +190,7 @@ export async function fetchBoxesPages(query: string) {
 export async function fetchBoxById(id: string) {
   noStore();
   try {
-    const data = await sql<InvoiceForm>`
+    const data = await sql<BoxForm>`
       SELECT
         boxes.id,
         boxes.box_id,
@@ -193,5 +230,27 @@ export async function fetchBoxes() {
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch all status.');
+  }
+}
+
+export async function fetchCategoriesPages(query: string){
+  noStore();
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM categories
+    WHERE
+    categories.name ILIKE ${`%${query}%`} OR
+    categories.description ILIKE ${`%${query}%`} OR
+    categories.status::text ILIKE ${`%${query}%`} OR
+    categories.create_date::text ILIKE ${`%${query}%`}
+  `;
+
+
+   console.log(count)
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of categories.');
   }
 }

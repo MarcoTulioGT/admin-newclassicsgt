@@ -17,7 +17,9 @@ export const formatDateToLocal = (
     month: 'short',
     year: 'numeric',
   };
+  console.log(dateStr)
   const formatter = new Intl.DateTimeFormat(locale, options);
+  console.log(formatter)
   return formatter.format(date);
 };
 

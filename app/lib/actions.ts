@@ -40,7 +40,7 @@ export async function createBox(prevState: State, formData: FormData) {
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create Invoice.',
+      message: 'Missing Fields. Failed to Create Box.',
     };
   }
     
@@ -70,7 +70,7 @@ export async function createBox(prevState: State, formData: FormData) {
       };
     }
 
-  // Revalidate the cache for the invoices page and redirect the user.
+  // Revalidate the cache for the boxes page and redirect the user.
   revalidatePath('/ui/dashboard/boxes');
   redirect('/ui/dashboard/boxes');
 }
@@ -111,7 +111,7 @@ export async function updateBox(id: string, prevState: State, formData: FormData
 }
 
 export async function deleteBox(id: string) {
-    //throw new Error('Failed to Delete Invoice');
+    //throw new Error('Failed to Delete Box');
 
     try{
     await sql`DELETE FROM boxes WHERE id = ${id}`;
