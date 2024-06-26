@@ -3,7 +3,7 @@ import CostChart from '@/app/ui/dashboard/cost-chart';
 import LatestBoxes from '@/app/ui/dashboard/latest-boxes';
 import { lusitana, rajdhani } from '@/app/ui/fonts';
 import { Suspense } from 'react';
-import { RevenueChartSkeleton, LatestBoxesSkeleton, CardsSkeleton } from '@/app/ui/skeletons';
+import { CostChartSkeleton, LatestBoxesSkeleton, CardsSkeleton } from '@/app/ui/skeletons';
 
 
 export default async function Page() {
@@ -18,7 +18,7 @@ export default async function Page() {
        </Suspense>
      </div>
      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-     <Suspense fallback={<RevenueChartSkeleton />}>
+     <Suspense fallback={<CostChartSkeleton />}>
          <CostChart />
        </Suspense>
      <Suspense fallback={<LatestBoxesSkeleton />}>

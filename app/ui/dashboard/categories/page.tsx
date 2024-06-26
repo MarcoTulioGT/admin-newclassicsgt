@@ -1,6 +1,6 @@
 import Pagination from '@/app/ui/categories/pagination';
 import Search from '@/app/ui/search';
-import { CreateBox } from '@/app/ui/categories/buttons';
+import { CreateCategory} from '@/app/ui/categories/buttons';
 import Table from '@/app/ui/categories/table';
 import { rajdhani } from '@/app/ui/fonts';
 import { fetchCategoriesPages } from '@/app/lib/data';
@@ -27,7 +27,7 @@ export default async function Page({
         </div>
         <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <Search placeholder="Search Categories..." />
-        <CreateBox />
+        <CreateCategory />
       </div>
         <Table query={query} currentPage={currentPage} />
         <div className="mt-5 flex w-full justify-center">

@@ -20,6 +20,9 @@ const FormSchema = z.object({
 const CreateBox = FormSchema.omit({ id: true, box_id: true  });
 const UpdateBox = FormSchema.omit({ id: true, box_id: true });
 
+const CreateCategory = FormSchema.omit({ id: true, name: true  });
+const UpdateCategory = FormSchema.omit({ id: true, name: true });
+
 export type State = {
   errors?: {
     cost?: string[];
@@ -48,7 +51,6 @@ export async function createBox(prevState: State, formData: FormData) {
     const { delivery_date, cost, status } = validatedFields.data;
     const amountInCents = cost * 100;
     const created_date = new Date()
-    console.log(created_date)
     const yyyy = created_date.getFullYear();
     let mm = created_date.getMonth() + 1; // Months start at 0!
     let dd = created_date.getDate();
@@ -57,14 +59,12 @@ export async function createBox(prevState: State, formData: FormData) {
     if (mm < 10) mm = '0' + mm;
 
     const name_box_id = 'box_'+dd+mm+yyyy
-    console.log(name_box_id)
     try {
     await sql`
     INSERT INTO boxes (box_id, cost, status, delivery_date)
     VALUES (${name_box_id}, ${amountInCents}, ${status}, ${delivery_date})
   `;
     } catch (error){
-      console.log(error)
       return {
         message: 'Database Error: Failed to Create Box.',
       };
@@ -93,7 +93,7 @@ export async function updateBox(id: string, prevState: State, formData: FormData
  
    const {  cost, delivery_date, status } = validatedFields.data;
    const costInCents = cost * 100;
-   console.log(delivery_date)
+
 
    try {
    await sql`
@@ -110,6 +110,41 @@ export async function updateBox(id: string, prevState: State, formData: FormData
    redirect('/ui/dashboard/boxes');
 }
 
+
+export async function updateCategory(id: string, prevState: State, formData: FormData) {
+
+  const validatedFields = UpdateCategory.safeParse({
+  parentid: formData.get('parentid'),
+  create_date: formData.get('create_date'),
+  status: formData.get('status'),
+ });
+
+ 
+ if (!validatedFields.success) {
+   return {
+     errors: validatedFields.error.flatten().fieldErrors,
+     message: 'Missing Fields. Failed to Update Category.',
+   };
+ }
+ 
+   const {  parentid, create_date, status } = validatedFields.data;
+   
+
+   try {
+   await sql`
+     UPDATE categories
+     SET parentid = ${parentid}, create_date = ${create_date}, status = ${status}
+     WHERE id = ${id}
+   `;
+   }catch (error){
+
+     return { message: 'Database Error: Failed to Update Category.'};
+   }
+  
+   revalidatePath('/ui/dashboard/categories');
+   redirect('/ui/dashboard/categories');
+}
+
 export async function deleteBox(id: string) {
     //throw new Error('Failed to Delete Box');
 
@@ -120,6 +155,18 @@ export async function deleteBox(id: string) {
     }catch (error){
       return { message: 'Database Error: Failed to Delete Box.'};
     }
+}
+
+export async function deleteCategory(id: string) {
+  //throw new Error('Failed to Delete Box');
+
+  try{
+  await sql`DELETE FROM categories WHERE id = ${id}`;
+  revalidatePath('/ui/dashboard/categories');
+  return { message: 'Deleted Category'};
+  }catch (error){
+    return { message: 'Database Error: Failed to Delete Category.'};
+  }
 }
 
 export async function authenticate(

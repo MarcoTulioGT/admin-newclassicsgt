@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { lusitana, rajdhani } from '@/app/ui/fonts';
-import { fetchRevenue } from '@/app/lib/data';
+import { fetchCost } from '@/app/lib/data';
 import { useState, useEffect } from 'react';
 import { BarGraps } from '@/app/ui/graphs/bar-graph';
 import { formatCurrency } from '@/app/lib/utils';
@@ -26,9 +26,9 @@ export const options = {
 
 
 export default async function CostChart() {
-    const revenue = await fetchRevenue();
-    const cost =revenue.map((month) => Number(month.cost)/100);
-    const labels = revenue.map((month) => month.month.trim());
+    const dataCost = await fetchCost();
+    const cost =dataCost.map((month) => Number(month.cost)/100);
+    const labels = dataCost.map((month) => month.month.trim());
 
 
   const data = {

@@ -68,7 +68,7 @@ export default async function BoxesTable({
               {boxes?.map((box) => (
                 <tr
                   key={box.id}
-                  className="w-full border py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg hover:bg-gray-50">
+                  className="w-full border py-3 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg hover:bg-gray-50">
                   <td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-300">
                     {box.box_id}
                   </td>

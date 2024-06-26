@@ -3,16 +3,17 @@ import {
   CategoriesField,
   BoxField,
   BoxForm,
+  CategoryForm,
   BoxesTable,
   CategoriesTable,
   LatestBoxRaw,
   User,
-  Revenue,
+  Cost,
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
 
-export async function fetchRevenue() {
+export async function fetchCost() {
   // Add noStore() here to prevent the response from being cached.
   // This is equivalent to in fetch(..., {cache: 'no-store'}).
   noStore();
@@ -20,10 +21,10 @@ export async function fetchRevenue() {
     // Artificially delay a response for demo purposes.
     // Don't do this in production :)
 
-    console.log('Fetching revenue data...');
+    console.log('Fetching cost data...');
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const data = await sql<Revenue>`select *
+    const data = await sql<Cost>`select *
     from(
     select sum(cost) cost, TO_CHAR(delivery_date, 'Monthyyyy') AS month,  delivery_date
     from boxes
@@ -35,7 +36,7 @@ export async function fetchRevenue() {
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch revenue data.');
+    throw new Error('Failed to fetch cost data.');
   }
 }
 
@@ -123,7 +124,7 @@ export async function fetchFilteredBoxes(
       ORDER BY boxes.delivery_date DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
-    console.log(boxes.rows)
+
     return boxes.rows;
   } catch (error) {
     console.error('Database Error:', error);
@@ -154,10 +155,10 @@ export async function fetchFilteredCategories(
       categories.name ILIKE ${`%${query}%`} OR
       categories.status::TEXT ILIKE ${`%${query}%`} OR
       categories.create_date::text ILIKE ${`%${query}%`} 
-      ORDER BY categories.create_date DESC
+      ORDER BY categories.ordenno ASC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
-    console.log(categories.rows)
+
     return categories.rows;
   } catch (error) {
     console.error('Database Error:', error);
@@ -214,6 +215,33 @@ export async function fetchBoxById(id: string) {
   }
 }
 
+export async function fetchCategoryById(id: string) {
+  noStore();
+  try {
+    const data = await sql<CategoryForm>`
+      SELECT
+      categories.id,
+        categories.name,
+        categories.description,     
+        categories.status,
+        categories.ordenno,
+        categories.parentid,
+        categories.picture,
+        categories.create_date
+      FROM categories
+      WHERE categories.id = ${id};
+    `;
+
+    const category = data.rows.map((category) => ({
+      ...category,
+    }));
+    return category[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch category.');
+  }
+}
+
 export async function fetchBoxes() {
   try {
     const data = await sql<BoxField>`
@@ -222,6 +250,25 @@ export async function fetchBoxes() {
         box_id
       FROM boxes
       ORDER BY box_id ASC
+    `;
+
+    const status = data.rows;
+
+    return status;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all status.');
+  }
+}
+
+export async function fetchCategories() {
+  try {
+    const data = await sql<CategoriesField>`
+      SELECT
+        id,
+        name
+      FROM categories
+      ORDER BY ordenno ASC
     `;
 
     const status = data.rows;
@@ -246,7 +293,6 @@ export async function fetchCategoriesPages(query: string){
   `;
 
 
-   console.log(count)
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
     return totalPages;
   } catch (error) {

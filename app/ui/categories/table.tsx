@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { UpdateBox, DeleteBox } from '@/app/ui/categories/buttons';
+import { UpdateBox, DeleteCategory } from '@/app/ui/categories/buttons';
 import BoxStatus from '@/app/ui/boxes/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredCategories } from '@/app/lib/data';
@@ -38,7 +38,7 @@ export default async function BoxesTable({
                   </div>
                   <div className="flex justify-end gap-1">
                     <UpdateBox id={category.id} />
-                    <DeleteBox id={category.id} />
+                    <DeleteCategory id={category.id} />
                   </div>
                 </div>
               </div>
@@ -50,6 +50,12 @@ export default async function BoxesTable({
                 <th scope="col" className="px-4 py-2 font-medium sm:pl-6">
                   Id
                 </th>
+                <th scope="col" className="px-4 py-2 font-medium sm:pl-6">
+                  Parent Id
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Order
+                </th>
                 <th scope="col" className="px-3 py-2 font-medium">
                   Category
                 </th>
@@ -57,7 +63,10 @@ export default async function BoxesTable({
                   Description
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
-                  Order
+                  Picture
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Created Date
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
@@ -68,9 +77,15 @@ export default async function BoxesTable({
               {categories?.map((category) => (
                 <tr
                   key={category.id}
-                  className="w-full border py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg hover:bg-gray-50">
+                  className="w-full border py-3 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg hover:bg-gray-50">
                   <td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-300">
                     {category.id}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-300">
+                    {category.parentid === null ? 0 : category.parentid }
+                  </td>
+                  <td className="whitespace-nowrap   px-3 py-1 hover:border hover:border-blue-300">
+                    {category.ordenno}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                     {category.name}
@@ -78,13 +93,22 @@ export default async function BoxesTable({
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {category.description}
                   </td>
-                  <td className="whitespace-nowrap   px-3 py-1 hover:border hover:border-blue-300">
-                    {category.ordenno}
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">           
+                  <Image
+                    src= {category.picture}
+                    alt={`${category.id}'s profile picture`}
+                    className="mr-4 rounded-sm"
+                    width={40}
+                    height={40}
+                  />         
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {formatDateToLocal(category.create_date)}
                   </td>
                   <td className="whitespace-nowrap py-1 pl-6 pr-3 hover:border hover:border-blue-300">
                     <div className="flex justify-end gap-1">
                      <UpdateBox id={category.id} />
-                      <DeleteBox id={category.id} />
+                      <DeleteCategory id={category.id} />
                     </div>
                   </td>
                 </tr>

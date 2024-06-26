@@ -1,4 +1,4 @@
-import { Revenue } from './definitions';
+import { Cost } from './definitions';
 
 export const formatCurrency = (amount: number) => {
   return (amount / 100).toLocaleString('en-US', {
@@ -17,9 +17,9 @@ export const formatDateToLocal = (
     month: 'short',
     year: 'numeric',
   };
-  console.log(dateStr)
+
   const formatter = new Intl.DateTimeFormat(locale, options);
-  console.log(formatter)
+
   return formatter.format(date);
 };
 
@@ -29,7 +29,7 @@ export const formatDateGT = (
 ) => {
   const date = new Date(dateStr);
   const formatter = new Intl.DateTimeFormat(locale).format(date);
-  console.log(formatter)
+
   return formatter
 };
 

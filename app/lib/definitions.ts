@@ -19,7 +19,7 @@ export type User = {
     status: 'filling' | 'paid' | 'intransit' | 'delivered';
   };
   
-  export type Revenue = {
+  export type Cost = {
     month: string;
     cost: number;
   };
@@ -74,3 +74,14 @@ export type User = {
     status: 'filling' | 'paid' | 'intransit' | 'delivered';
   };
   
+  export type CategoryForm = {
+    id: string;
+    name: string;
+    description: string;
+    status: bool;
+    ordenno: number;
+    parentid: string;
+    picture: string;
+    create_date: string;
+
+  };
