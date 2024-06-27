@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { UpdateBox, DeleteCategory } from '@/app/ui/categories/buttons';
-import BoxStatus from '@/app/ui/boxes/status';
+import CategoryStatus from '@/app/ui/categories/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredCategories } from '@/app/lib/data';
 
@@ -27,7 +27,7 @@ export default async function BoxesTable({
                   <div>
                     <p className="text-sm text-gray-500">{category.name}</p>
                   </div>
-                  <BoxStatus status={category.status} />
+                  <CategoryStatus status={category.status} />
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
@@ -68,6 +68,12 @@ export default async function BoxesTable({
                 <th scope="col" className="px-3 py-2 font-medium">
                   Created Date
                 </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Status
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Updated Date
+                </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
                 </th>
@@ -104,6 +110,12 @@ export default async function BoxesTable({
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {formatDateToLocal(category.create_date)}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                    <CategoryStatus status={category.status} />
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {formatDateToLocal(category.updated_date)}
                   </td>
                   <td className="whitespace-nowrap py-1 pl-6 pr-3 hover:border hover:border-blue-300">
                     <div className="flex justify-end gap-1">

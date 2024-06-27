@@ -1,34 +1,36 @@
 'use client';
 
-import { CategoriesFields, CategoryForm } from '@/app/lib/definitions';
-import {
-  XCircleIcon, CheckCircleIcon, ListBulletIcon, TagIcon, InformationCircleIcon, PhotoIcon
-} from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import {
+  CheckIcon,
+  ClockIcon,
+  CurrencyDollarIcon,
+  UserCircleIcon,
+  CalendarDaysIcon,
+  TruckIcon,
+  BanknotesIcon,
+  ArchiveBoxArrowDownIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  ListBulletIcon,
+  TagIcon,
+  InformationCircleIcon,
+  PhotoIcon
+} from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
-import { updateCategory } from '@/app/lib/actions';
+import { createBox } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
-import { formatDateToLocal, formatDateGT } from '@/app/lib/utils';
 
-
-export default function EditCategoryForm({
-    category,
-    categories,
-}: {
-    category: CategoryForm;
-    categories: CategoriesField[];
-}) {
+export default function Form({ }) {
+  
+  
   
   
   const initialState = { message: null, errors: {} };
-  const updateCategoryWithId = updateCategory.bind(null, category.id);
-  const [state, dispatch] = useFormState(updateCategoryWithId, initialState);
-  console.log(category)
-  
+  const [state, dispatch] = useFormState(createBox, initialState);
   return (
     <form action={dispatch}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-
 
         {/* Category Order */}
         <div className="mb-4">
@@ -42,7 +44,6 @@ export default function EditCategoryForm({
                 name="ordenno"
                 type="number"
                 step="1"
-                defaultValue={category.ordenno}
                 placeholder="Enter order number"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="ordenno-error"
@@ -73,7 +74,6 @@ export default function EditCategoryForm({
                 id="name"
                 name="name"
                 type="text"
-                defaultValue={category.name}
                 placeholder="Enter name"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="name-error"
@@ -102,7 +102,6 @@ export default function EditCategoryForm({
                 id="description"
                 name="description"
                 type="text"
-                defaultValue={category.description}
                 placeholder="Enter description"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="description-error"
@@ -132,7 +131,6 @@ export default function EditCategoryForm({
                 id="picture"
                 name="picture"
                 type="text"
-                defaultValue={category.picture}
                 placeholder="Enter picture"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="picture-error"
@@ -150,7 +148,6 @@ export default function EditCategoryForm({
           </div>
         </div>
 
-  
         {/* Category Status */}
         <fieldset>
           <legend className="mb-2 block text-sm font-medium">
@@ -164,7 +161,7 @@ export default function EditCategoryForm({
                   name="status"
                   type="radio"
                   value="enabled"
-                  defaultChecked={category.status === 'enabled'}
+                  defaultChecked="enabled"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -180,7 +177,6 @@ export default function EditCategoryForm({
                   name="status"
                   type="radio"
                   value="disabled"
-                  defaultChecked={category.status === 'disabled'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -202,14 +198,12 @@ export default function EditCategoryForm({
           </div>
         </fieldset>
 
-
+      
         <div aria-live="polite" aria-atomic="true">
           {state.message ? (
             <p className="mt-2 text-sm text-red-500">{state.message}</p>
           ) : null}
         </div>
-
-        
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
@@ -218,7 +212,7 @@ export default function EditCategoryForm({
         >
           Cancel
         </Link>
-        <Button type="submit">Edit Category</Button>
+        <Button type="submit" >Create Category</Button>
       </div>
     </form>
   );

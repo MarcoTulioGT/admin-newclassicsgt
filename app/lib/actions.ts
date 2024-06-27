@@ -17,11 +17,23 @@ const FormSchema = z.object({
   }),
   delivery_date: z.string(),
 });
+
+const FormSchemaCategory = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  status: z.string(),
+  ordenno: z.coerce.number(),
+  parentid: z.string(),
+  picture: z.string(),
+  //create_date: z.string(),
+});
+
 const CreateBox = FormSchema.omit({ id: true, box_id: true  });
 const UpdateBox = FormSchema.omit({ id: true, box_id: true });
 
 const CreateCategory = FormSchema.omit({ id: true, name: true  });
-const UpdateCategory = FormSchema.omit({ id: true, name: true });
+const UpdateCategory = FormSchemaCategory.omit({ id: true, parentid: true});
 
 export type State = {
   errors?: {
@@ -114,8 +126,10 @@ export async function updateBox(id: string, prevState: State, formData: FormData
 export async function updateCategory(id: string, prevState: State, formData: FormData) {
 
   const validatedFields = UpdateCategory.safeParse({
-  parentid: formData.get('parentid'),
-  create_date: formData.get('create_date'),
+  ordenno: formData.get('ordenno'),
+  name: formData.get('name'),
+  description: formData.get('description'),
+  picture: formData.get('picture'),
   status: formData.get('status'),
  });
 
@@ -127,13 +141,13 @@ export async function updateCategory(id: string, prevState: State, formData: For
    };
  }
  
-   const {  parentid, create_date, status } = validatedFields.data;
-   
-
+   const { ordenno, name, description, picture, status } = validatedFields.data;
+   const order = Number(ordenno);
+ 
    try {
    await sql`
      UPDATE categories
-     SET parentid = ${parentid}, create_date = ${create_date}, status = ${status}
+     SET ordenno = ${order}, name = ${name}, description = ${description}, picture = ${picture}, status= ${status}, updated_date = current_date
      WHERE id = ${id}
    `;
    }catch (error){

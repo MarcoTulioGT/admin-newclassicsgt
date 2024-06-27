@@ -149,7 +149,9 @@ export async function fetchFilteredCategories(
       categories.ordenno,
       categories.parentid,
       categories.picture,
-      categories.create_date
+      categories.create_date,
+      categories.status,
+      categories.updated_date
       FROM categories
       WHERE
       categories.name ILIKE ${`%${query}%`} OR

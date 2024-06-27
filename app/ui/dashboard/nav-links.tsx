@@ -79,7 +79,7 @@ export default function NavLinks() {
               {
                 'max-sm:hidden': link.mobile === false,
               },
-              'flex h-[30px] grow items-center justify-center gap-2 rounded-sm bg-gray-50 p-3 text-sm font-small hover:bg-slate-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
+              'flex h-[30px] grow items-center justify-center gap-2 rounded-sm bg-slate-200 p-3 text-sm font-small hover:bg-slate-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
               {
                 'bg-slate-100 text-blue-600': pathname === link.href,
               },
