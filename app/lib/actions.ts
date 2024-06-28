@@ -32,7 +32,7 @@ const FormSchemaCategory = z.object({
 const CreateBox = FormSchema.omit({ id: true, box_id: true  });
 const UpdateBox = FormSchema.omit({ id: true, box_id: true });
 
-const CreateCategory = FormSchema.omit({ id: true, name: true  });
+const CreateCategory = FormSchemaCategory.omit({ id: true });
 const UpdateCategory = FormSchemaCategory.omit({ id: true, parentid: true});
 
 export type State = {
@@ -181,6 +181,47 @@ export async function deleteCategory(id: string) {
   }catch (error){
     return { message: 'Database Error: Failed to Delete Category.'};
   }
+}
+
+export async function createCategory(prevState: State, formData: FormData) {
+
+    // Validate form using Zod
+    const validatedFields = CreateCategory.safeParse({
+      name: formData.get('name'),
+      description: formData.get('description'),
+      status: formData.get('status'),
+      ordenno: formData.get('ordenno'),
+      parentid: formData.get('parentid'),
+      picture: formData.get('picture'),
+      });
+  
+      // If form validation fails, return errors early. Otherwise, continue.
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Missing Fields. Failed to Create Category.',
+      };
+    }
+      
+       // Prepare data for insertion into the database
+      const { name, description, status, ordenno, parentid, picture } = validatedFields.data;
+
+      try {
+      await sql`
+      INSERT INTO categories (name, description, status, ordenno, parentid, picture)
+      VALUES (${name}, ${description}, ${status}, ${ordenno}, ${parentid}, ${picture})
+      ON CONFLICT (id) DO NOTHING
+    `;
+      } catch (error){
+        console.log(error)
+        return {
+          message: 'Database Error: Failed to Create Category.',
+        };
+      }
+  
+    // Revalidate the cache for the categories page and redirect the user.
+    revalidatePath('/ui/dashboard/categories');
+    redirect('/ui/dashboard/categories');
 }
 
 export async function authenticate(

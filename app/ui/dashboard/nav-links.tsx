@@ -28,7 +28,7 @@ const links = [
     mobile: false,
   },
   {
-    name: 'Product',
+    name: 'Products',
     href: '/ui/dashboard/products',
     icon: RectangleGroupIcon,
     mobile: false,

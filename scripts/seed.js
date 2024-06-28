@@ -80,3 +80,40 @@ CREATE TABLE IF NOT EXISTS boxes (
         INSERT INTO categories (name, description, status, ordenno, parentid, picture)
         VALUES ( 'Cars', 'Toys of Cars', true, 13, '5b19c66a-8019-458b-9bed-d21db8cae413', '/categories/cars.jpg')
         ON CONFLICT (id) DO NOTHING;
+
+
+
+
+    CREATE TABLE IF NOT EXISTS products (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        noitem VARCHAR(500) NOT NULL,
+        status  VARCHAR(100) NOT NULL,
+        count_available INT NOT NULL,
+        count_sold INT NOT NULL,
+        count_incoming INT NOT NULL,
+        investment_dollar INT NOT NULL,
+        unit_price_purchase INT NOT NULL,
+        sum_price_purchaseQ INT NOT NULL,
+        cost_shipping_us INT NOT NULL,
+        cost_shipping_gt INT NOT NULL,
+        cost_shipping_unit_total INT NOT NULL,
+        purchase_price INT NOT NULL,
+        profit_percentage INT NOT NULL,
+        sale_price INT NOT NULL,
+        utility INT NOT NULL,
+        picture TEXT [],
+        box_id VARCHAR(100) NOT NULL,
+        categories TEXT [],
+        create_date DATE NOT NULL default CURRENT_DATE ,
+        updated_date DATE NOT NULL default CURRENT_DATE );
+
+
+        INSERT INTO products (name, noitem, status, count_available, count_sold,count_incoming,investment_dollar,
+            unit_price_purchase,sum_price_purchaseQ,cost_shipping_us,cost_shipping_gt,cost_shipping_unit_total,purchase_price,
+            profit_percentage,sale_price,utility,picture,box,categories)
+        VALUES ( 'TMNT Cosplay Roll Down Beanie', 'BWKCM5Z65', 'enabled', 14, 2, 16,22140,
+                1230,155472,672,1000,1672,11512,
+                422,199,85,ARRAY ['https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_1.jpg','https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_2.jpg','https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_3.jpg'],
+                'box_08062024',ARRAY ['Turtle Ninja','Accessories','toys'])
+        ON CONFLICT (id) DO NOTHING;

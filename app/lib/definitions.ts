@@ -54,16 +54,44 @@ export type User = {
     picture: string;
     create_date: string;
   }
+ 
+  export type ProductsTable = {
+    id: string;
+    name: string;
+    noitem: string;
+    status: string;
+    count_available: number;
+    count_sold: number;
+    count_incoming: number;
+    investment_dollar: number;
+    unit_price_purchase: number;
+    sum_price_purchaseq: number;
+    cost_shipping_us: number;
+    cost_shipping_gt: number;
+    cost_shipping_unit_total: number;
+    purchase_price: number;
+    profit_percentage: number;
+    sale_price: number;
+    utility: number;
+    box: string;
+    categories : string;
+    updated_date: string;
+    picture: string;
+    create_date: string;
+  }
 
   export type BoxField = {
     id: string;
     box_id: string;
   };
   
-
-  export type CategoriesField = {
+  export type CategoryField = {
     id: string;
     name: string;
+  };
+
+  export type OrdennoField = {
+    ordenno: number;
   }
   
   export type BoxForm = {

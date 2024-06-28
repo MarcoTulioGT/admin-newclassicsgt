@@ -1,5 +1,5 @@
 'use client';
-
+import { CategoryField, OrdennoField } from '@/app/lib/definitions';
 import Link from 'next/link';
 import {
   CheckIcon,
@@ -18,19 +18,53 @@ import {
   PhotoIcon
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
-import { createBox } from '@/app/lib/actions';
+import { createCategory, OrdennoField } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 
-export default function Form({ }) {
-  
-  
-  
+export default function Form({ categories , ordenno}: { categories: CategoryField[] , ordenno: OrdennoField }) { 
   
   const initialState = { message: null, errors: {} };
-  const [state, dispatch] = useFormState(createBox, initialState);
+  const [state, dispatch] = useFormState(createCategory, initialState);
+
+
   return (
     <form action={dispatch}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
+     
+
+                {/* Parentid Name */}
+                <div className="mb-4">
+          <label htmlFor="parentid" className="mb-2 block text-sm font-medium">
+            Choose parent category
+          </label>
+          <div className="relative">
+            <select
+              id="parentid"
+              name="parentid"
+              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              defaultValue=""
+              aria-describedby="parentid-error"
+            >
+              <option value="" disabled>
+                Select a categories
+              </option>
+              {categories.map((category) => (
+                <option key={category.id == null ? 0: category.id} value={category.id == null ? 0: category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+          </div>
+          <div id="parentid-error" aria-live="polite" aria-atomic="true">
+        {state.errors?.parentid &&
+          state.errors.parentid.map((error: string) => (
+            <p className="mt-2 text-sm text-red-500" key={error}>
+              {error}
+            </p>
+          ))}
+      </div>
+        </div>
 
         {/* Category Order */}
         <div className="mb-4">
@@ -42,7 +76,8 @@ export default function Form({ }) {
               <input
                 id="ordenno"
                 name="ordenno"
-                type="number"
+                type="number"         
+                defaultValue={ordenno.ordenno}
                 step="1"
                 placeholder="Enter order number"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -60,8 +95,6 @@ export default function Form({ }) {
       </div>
           </div>
         </div>
-
-
 
   {/* Category Name */}
   <div className="mb-4">

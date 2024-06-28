@@ -1,11 +1,13 @@
 import { sql } from '@vercel/postgres';
 import {
   CategoriesField,
+  OrdennoField,
   BoxField,
   BoxForm,
   CategoryForm,
   BoxesTable,
   CategoriesTable,
+  ProductsTable,
   LatestBoxRaw,
   User,
   Cost,
@@ -157,7 +159,7 @@ export async function fetchFilteredCategories(
       categories.name ILIKE ${`%${query}%`} OR
       categories.status::TEXT ILIKE ${`%${query}%`} OR
       categories.create_date::text ILIKE ${`%${query}%`} 
-      ORDER BY categories.ordenno ASC
+      ORDER BY categories.ordenno asc
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
 
@@ -168,6 +170,53 @@ export async function fetchFilteredCategories(
   }
 }
 
+export async function fetchFilteredProducts( 
+  query: string,
+  currentPage: number,
+ ) {
+  noStore();
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  try {
+    const products = await sql<ProductsTable>`
+      SELECT
+      products.id,
+      products.name,
+      products.noitem,
+      products.status,
+      products.count_available,
+      products.count_sold,
+      products.count_incoming,
+      products.investment_dollar,
+      products.unit_price_purchase,
+      products.sum_price_purchaseq,
+      products.cost_shipping_us,
+      products.cost_shipping_gt,
+      products.cost_shipping_unit_total,
+      products.purchase_price,
+      products.profit_percentage,
+      products.sale_price,
+      products.utility,
+      products.box,
+      products.categories,
+      products.updated_date,
+      products.picture,
+      products.create_date
+      FROM products
+      WHERE
+      products.name ILIKE ${`%${query}%`} OR
+      products.status::TEXT ILIKE ${`%${query}%`} OR
+      products.create_date::text ILIKE ${`%${query}%`} 
+      ORDER BY products.name asc
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `;
+
+    return products.rows;
+  } catch (error) {
+    console.log(error)
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch products.');
+  }
+}
 
 export async function fetchBoxesPages(query: string) {
   noStore();
@@ -263,17 +312,34 @@ export async function fetchBoxes() {
   }
 }
 
+export async function fetchOrdeno() {
+  try {
+    const data = await sql<OrdennoField>`
+      SELECT
+        max(ordenno)+1 ordenno
+      FROM categories
+    `;
+    var ordenno = data.rows[0];
+    return ordenno;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all OrdennoField.');
+  }
+}
+
 export async function fetchCategories() {
   try {
     const data = await sql<CategoriesField>`
-      SELECT
-        id,
-        name
-      FROM categories
-      ORDER BY ordenno ASC
+    SELECT  null as id, 'New' AS name
+    UNION
+    SELECT
+      id, name
+    FROM categories
+    order by name 
     `;
 
-    const status = data.rows;
+    
+    var status = data.rows;
 
     return status;
   } catch (err) {
@@ -302,3 +368,26 @@ export async function fetchCategoriesPages(query: string){
     throw new Error('Failed to fetch total number of categories.');
   }
 }
+
+export async function fetchProductsPages(query: string){
+  noStore();
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM products
+    WHERE
+    products.name ILIKE ${`%${query}%`} OR
+    products.noitem ILIKE ${`%${query}%`} OR
+    products.box ILIKE ${`%${query}%`} OR
+    products.status::text ILIKE ${`%${query}%`} OR
+    products.create_date::text ILIKE ${`%${query}%`}
+  `;
+
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of products.');
+  }
+}
+
