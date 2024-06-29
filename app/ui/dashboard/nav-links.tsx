@@ -28,15 +28,15 @@ const links = [
     mobile: false,
   },
   {
-    name: 'Products',
-    href: '/ui/dashboard/products',
-    icon: RectangleGroupIcon,
-    mobile: false,
-  },
-  {
     name: 'Purchases',
     href: '/ui/dashboard/purchases',
     icon: ClipboardDocumentListIcon,
+    mobile: false,
+  },
+  {
+    name: 'Products',
+    href: '/ui/dashboard/products',
+    icon: RectangleGroupIcon,
     mobile: false,
   },
   {

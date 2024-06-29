@@ -8,6 +8,7 @@ import {
   BoxesTable,
   CategoriesTable,
   ProductsTable,
+  PurchasesTable,
   LatestBoxRaw,
   User,
   Cost,
@@ -218,6 +219,40 @@ export async function fetchFilteredProducts(
   }
 }
 
+export async function fetchFilteredPurchases ( query: string,
+  currentPage: number,
+ ) {
+  noStore();
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  try {
+    const purchases = await sql<PurchasesTable>`
+      SELECT
+      purchases.id,
+      purchases.name,
+      purchases.noitem,
+      purchases.qty,
+      purchases.price,
+      purchases.investment_dollar,
+      purchases.images,
+      purchases.box_id,
+      purchases.create_date,
+      purchases.updated_date
+      FROM purchases
+      WHERE
+      purchases.name ILIKE ${`%${query}%`} OR
+      purchases.create_date::text ILIKE ${`%${query}%`} 
+      ORDER BY purchases.name asc
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `;
+
+    return purchases.rows;
+  } catch (error) {
+    console.log(error)
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch purchases.');
+  }
+
+}
 export async function fetchBoxesPages(query: string) {
   noStore();
   try {
@@ -293,6 +328,35 @@ export async function fetchCategoryById(id: string) {
   }
 }
 
+export async function fetchPurchaseById(id: string) {
+  noStore();
+  try {
+    const data = await sql<CategoryForm>`
+      SELECT
+      purchases.id,
+      purchases.name,
+        purchases.noitem,     
+        purchases.qty,
+        purchases.price,
+        purchases.investment_dollar,
+        purchases.images,
+        purchases.box_id,
+        purchases.create_date,
+        purchases.updated_date
+      FROM purchases
+      WHERE purchases.id = ${id};
+    `;
+
+    const purchase = data.rows.map((purchase) => ({
+      ...purchase,
+    }));
+    return purchase[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch purchase.');
+  }
+}
+
 export async function fetchBoxes() {
   try {
     const data = await sql<BoxField>`
@@ -348,6 +412,7 @@ export async function fetchCategories() {
   }
 }
 
+
 export async function fetchCategoriesPages(query: string){
   noStore();
   try {
@@ -390,4 +455,26 @@ export async function fetchProductsPages(query: string){
     throw new Error('Failed to fetch total number of products.');
   }
 }
+
+export async function fetchPurchasesPages(query: string){
+  noStore();
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM purchases
+    WHERE
+    purchases.name ILIKE ${`%${query}%`} OR
+    purchases.noitem ILIKE ${`%${query}%`} OR
+    purchases.box_id ILIKE ${`%${query}%`} OR
+    purchases.create_date::text ILIKE ${`%${query}%`}
+  `;
+
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of purchases.');
+  }
+}
+
 

@@ -159,6 +159,42 @@ export async function updateCategory(id: string, prevState: State, formData: For
    redirect('/ui/dashboard/categories');
 }
 
+export async function updatePurchase(id: string, prevState: State, formData: FormData) {
+
+  const validatedFields = UpdateCategory.safeParse({
+  ordenno: formData.get('ordenno'),
+  name: formData.get('name'),
+  description: formData.get('description'),
+  picture: formData.get('picture'),
+  status: formData.get('status'),
+ });
+
+ 
+ if (!validatedFields.success) {
+   return {
+     errors: validatedFields.error.flatten().fieldErrors,
+     message: 'Missing Fields. Failed to Update Category.',
+   };
+ }
+ 
+   const { ordenno, name, description, picture, status } = validatedFields.data;
+   const order = Number(ordenno);
+ 
+   try {
+   await sql`
+     UPDATE categories
+     SET ordenno = ${order}, name = ${name}, description = ${description}, picture = ${picture}, status= ${status}, updated_date = current_date
+     WHERE id = ${id}
+   `;
+   }catch (error){
+
+     return { message: 'Database Error: Failed to Update Category.'};
+   }
+  
+   revalidatePath('/ui/dashboard/categories');
+   redirect('/ui/dashboard/categories');
+}
+
 export async function deleteBox(id: string) {
     //throw new Error('Failed to Delete Box');
 
@@ -172,7 +208,7 @@ export async function deleteBox(id: string) {
 }
 
 export async function deleteCategory(id: string) {
-  //throw new Error('Failed to Delete Box');
+  //throw new Error('Failed to Delete Category');
 
   try{
   await sql`DELETE FROM categories WHERE id = ${id}`;
@@ -180,6 +216,18 @@ export async function deleteCategory(id: string) {
   return { message: 'Deleted Category'};
   }catch (error){
     return { message: 'Database Error: Failed to Delete Category.'};
+  }
+}
+
+export async function deletePurchase(id: string) {
+  //throw new Error('Failed to Delete Purchase');
+
+  try{
+  await sql`DELETE FROM purchases WHERE id = ${id}`;
+  revalidatePath('/ui/dashboard/purchases');
+  return { message: 'Deleted Purchase'};
+  }catch (error){
+    return { message: 'Database Error: Failed to Delete Purchase.'};
   }
 }
 

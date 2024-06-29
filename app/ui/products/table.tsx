@@ -45,25 +45,61 @@ export default async function ProductsTable({
             ))}
           </div>
           <table className="hidden min-w-full text-gray-600 sm:table">
-            <thead className="rounded-lg text-left text-sm font-normal">
+            <thead className="rounded-lg text-left text-xs font-normal">
               <tr>
-                <th scope="col" className="px-4 py-2 font-medium sm:pl-6">
-                  Id
-                </th>
                 <th scope="col" className="px-4 py-2 font-medium sm:pl-6">
                   No Item
                 </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Status
+                <th scope="col" className="px-4 py-2 font-medium sm:pl-6">
+                  Name
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
-                  Count Avaliable
+                  Cnt Avail
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
                   Count Sold
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
-                  Picture
+                  Count Incoming
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Investment $
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Unit Price Purchase
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Sum price purchase Q
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Cost Shipping US
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Cost Shipping GT
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Cost Shipping Unit Total
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Purchase Price
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Profit %
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Sale Price
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Utility
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Box
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Categories
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Images
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
                   Created Date
@@ -85,13 +121,10 @@ export default async function ProductsTable({
                   key={product.id}
                   className="w-full border py-3 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg hover:bg-gray-50">
                   <td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-300">
-                    {product.id}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-300">
-                    {product.noitem === null ? 0 : product.noitem }
+                    {product.noitem}
                   </td>
                   <td className="whitespace-nowrap   px-3 py-1 hover:border hover:border-blue-300">
-                    {product.status}
+                    {product.name}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                     {product.count_available}
@@ -99,9 +132,48 @@ export default async function ProductsTable({
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {product.count_sold}
                   </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {product.count_incoming}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {product.investment_dollar}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {product.unit_price_purchase}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {product.sum_price_purchaseq}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {product.cost_shipping_us}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {product.cost_shipping_gt}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {product.cost_shipping_unit_total}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {product.purchase_price}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {product.profit_percentage}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {product.sale_price}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {product.utility}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {product.box}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {product.categories}
+                  </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">           
                   <Image
-                    src= {product.picture}
+                    src= {product.picture[0]}
                     alt={`${product.id}'s profile picture`}
                     className="mr-4 rounded-sm"
                     width={40}

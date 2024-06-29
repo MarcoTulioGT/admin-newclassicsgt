@@ -117,3 +117,24 @@ CREATE TABLE IF NOT EXISTS boxes (
                 422,199,85,ARRAY ['https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_1.jpg','https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_2.jpg','https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_3.jpg'],
                 'box_08062024',ARRAY ['Turtle Ninja','Accessories','toys'])
         ON CONFLICT (id) DO NOTHING;
+
+
+
+        CREATE TABLE IF NOT EXISTS purchases (
+            id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            noitem VARCHAR(500) NOT NULL,
+            qty INT NOT NULL,
+            price INT NOT NULL,
+            investment_dollar INT NOT NULL,
+            images TEXT [],
+            box_id VARCHAR(100) NOT NULL,
+            create_date DATE NOT NULL default CURRENT_DATE ,
+            updated_date DATE NOT NULL default CURRENT_DATE );
+
+
+        INSERT INTO purchases(name,noitem,qty,price,investment_dollar,images,box_id)
+        VALUES('TMNT Cosplay Roll Down Beanie', 'BWKCM5Z65',3,1230,3690,
+        ARRAY ['https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_1.jpg','https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_2.jpg','https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_3.jpg'],
+        'box_08062024')
+        ON CONFLICT (id) DO NOTHING;
