@@ -29,11 +29,27 @@ const FormSchemaCategory = z.object({
   //create_date: z.string(),
 });
 
+const FormSchemaPurchase =z.object({
+id: z.string(),
+name: z.string(),
+noitem: z.string(),
+qty: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
+investment_dollar: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+box_id: z.string(),
+});
+
+
 const CreateBox = FormSchema.omit({ id: true, box_id: true  });
 const UpdateBox = FormSchema.omit({ id: true, box_id: true });
 
 const CreateCategory = FormSchemaCategory.omit({ id: true });
 const UpdateCategory = FormSchemaCategory.omit({ id: true, parentid: true});
+
+//const CreateCategory = FormSchemaCategory.omit({ id: true });
+const UpdatePurchase = FormSchemaPurchase.omit({ id: true});
+
+
+
 
 export type State = {
   errors?: {
@@ -161,38 +177,45 @@ export async function updateCategory(id: string, prevState: State, formData: For
 
 export async function updatePurchase(id: string, prevState: State, formData: FormData) {
 
-  const validatedFields = UpdateCategory.safeParse({
-  ordenno: formData.get('ordenno'),
+  console.log(formData)
+  const validatedFields = UpdatePurchase.safeParse({
+  noitem: formData.get('noitem'),
+  box_id: formData.get('box_id'),
   name: formData.get('name'),
-  description: formData.get('description'),
-  picture: formData.get('picture'),
-  status: formData.get('status'),
+  qty: formData.get('qty'),
+  investment_dollar: formData.get('investment_dollar'),
  });
 
  
  if (!validatedFields.success) {
    return {
      errors: validatedFields.error.flatten().fieldErrors,
-     message: 'Missing Fields. Failed to Update Category.',
+     message: 'Missing Fields. Failed to Update Purchase.',
    };
  }
  
-   const { ordenno, name, description, picture, status } = validatedFields.data;
-   const order = Number(ordenno);
+   const { noitem, box_id, name, qty, investment_dollar } = validatedFields.data;
+
  
    try {
    await sql`
-     UPDATE categories
-     SET ordenno = ${order}, name = ${name}, description = ${description}, picture = ${picture}, status= ${status}, updated_date = current_date
+     UPDATE purchases
+     SET 
+     noitem = ${noitem},
+     box_id = ${box_id}, 
+     name = ${name}, 
+     qty = ${qty}, 
+     investment_dollar= ${investment_dollar}, 
+     updated_date = current_date
      WHERE id = ${id}
    `;
    }catch (error){
 
-     return { message: 'Database Error: Failed to Update Category.'};
+     return { message: 'Database Error: Failed to Update Purchase.'};
    }
   
-   revalidatePath('/ui/dashboard/categories');
-   redirect('/ui/dashboard/categories');
+   revalidatePath('/ui/dashboard/purchases');
+   redirect('/ui/dashboard/purchases');
 }
 
 export async function deleteBox(id: string) {

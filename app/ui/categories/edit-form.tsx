@@ -23,7 +23,7 @@ export default function EditCategoryForm({
   const initialState = { message: null, errors: {} };
   const updateCategoryWithId = updateCategory.bind(null, category.id);
   const [state, dispatch] = useFormState(updateCategoryWithId, initialState);
-  console.log(category)
+
   
   return (
     <form action={dispatch}>

@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       if (!purchase) {
         notFound();
       }
-      console.log(purchase)  
+
   return (
     <main>
       <Breadcrumbs

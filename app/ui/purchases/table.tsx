@@ -56,10 +56,10 @@ export default async function PurchasesTable({
                   Name
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
-                  qty
+                  Qty
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
-                  price
+                  Cost U. $
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
                   Investment $

@@ -362,7 +362,8 @@ export async function fetchBoxes() {
     const data = await sql<BoxField>`
       SELECT
         id,
-        box_id
+        box_id,
+        status
       FROM boxes
       ORDER BY box_id ASC
     `;

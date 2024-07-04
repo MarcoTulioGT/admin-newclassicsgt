@@ -96,6 +96,7 @@ export type User = {
   export type BoxField = {
     id: string;
     box_id: string;
+    status: string;
   };
   
   export type CategoryField = {
@@ -126,3 +127,16 @@ export type User = {
     create_date: string;
 
   };
+
+  export type PurchasesForm={
+    id: string;
+    name: string;
+    noitem: string;
+    qty: number;
+    price: number;
+    investment_dollar: number;
+    images: string;
+    box_id: string;
+    create_date: string;
+    updated_date: string;
+  }

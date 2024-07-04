@@ -25,7 +25,7 @@ export function UpdateBox({ id }: { id: string }) {
 }
 
 export function DeletePurchase({ id }: { id: string }) {
-  console.log(id)
+
   const deletePurchaseWithId = deletePurchase.bind(null, id);
   return (
     <>

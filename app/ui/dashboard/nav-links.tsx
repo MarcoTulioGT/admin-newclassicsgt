@@ -40,15 +40,15 @@ const links = [
     mobile: false,
   },
   {
-    name: 'Shipping',
-    href: '/ui/dashboard/shippings',
-    icon: TruckIcon,
-    mobile: true,
-  },
-  {
     name: 'Sales',
     href: '/ui/dashboard/sales',
     icon: TableCellsIcon,
+    mobile: true,
+  },
+  {
+    name: 'Shipping',
+    href: '/ui/dashboard/shippings',
+    icon: TruckIcon,
     mobile: true,
   },
   {

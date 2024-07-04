@@ -1,6 +1,6 @@
 'use client';
 
-import { CategoriesFields, CategoryForm } from '@/app/lib/definitions';
+import { BoxField, PurchasesForm } from '@/app/lib/definitions';
 import {
   XCircleIcon, CheckCircleIcon, ListBulletIcon, TagIcon, InformationCircleIcon, PhotoIcon
 } from '@heroicons/react/24/outline';
@@ -9,28 +9,28 @@ import { Button } from '@/app/ui/button';
 import { updatePurchase } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import { formatDateToLocal, formatDateGT } from '@/app/lib/utils';
-
+import Image from 'next/image';
 
 export default function EditPurchaseForm({
     purchase,
     boxes,
 }: {
-    purchase: CategoryForm;
-    boxes: CategoriesField[];
+    purchase: PurchasesForm;
+    boxes: BoxField[];
 }) {
   
   
   const initialState = { message: null, errors: {} };
   const updatePurchaseWithId = updatePurchase.bind(null, purchase.id);
   const [state, dispatch] = useFormState(updatePurchaseWithId, initialState);
-  console.log(purchase)
+
   
   return (
     <form action={dispatch}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
 
 
-        {/* Category noitem */}
+        {/* purchase noitem */}
         <div className="mb-4">
           <label htmlFor="noitem" className="mb-2 block text-sm font-medium">
             Item Number
@@ -59,37 +59,34 @@ export default function EditPurchaseForm({
           </div>
         </div>
 
-
- {/* Category box_id */}
- <div className="mb-4">
+{/* Box Id */}
+<div className="mb-4">
           <label htmlFor="box_id" className="mb-2 block text-sm font-medium">
-            Choose a box
+            Choose box
           </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="box_id"
-                name="box_id"
-                type="text"
-                defaultValue={purchase.box_id}
-                placeholder="Enter box_id"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                aria-describedby="box_id-error"
-              />
-              <TagIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-            </div>
-            <div id="box_id-error" aria-live="polite" aria-atomic="true">
-        {state.errors?.box_id &&
-          state.errors.box_id.map((error: string) => (
-            <p className="mt-2 text-sm text-red-500" key={error}>
-              {error}
-            </p>
-          ))}
-      </div>
+          <div className="relative">
+            <select
+              id="box"
+              name="box_id"
+              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              defaultValue={purchase.box_id}
+            >
+              <option value="" disabled>
+                Select a box
+              </option>
+              {boxes.map((box) => (
+                <option key={box.id} value={box.box_id}>
+                  {box.box_id+"_"+box.status}
+                </option>
+              ))}
+            </select>
+            <TagIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
         </div>
 
-  {/* Category Name */}
+
+
+  {/* purchase Name */}
   <div className="mb-4">
           <label htmlFor="name" className="mb-2 block text-sm font-medium">
             Choose a name
@@ -118,7 +115,7 @@ export default function EditPurchaseForm({
           </div>
         </div>
 
- {/* Category qty */}
+ {/* purchase qty */}
  <div className="mb-4">
           <label htmlFor="qty" className="mb-2 block text-sm font-medium">
           qty
@@ -147,7 +144,7 @@ export default function EditPurchaseForm({
           </div>
         </div>
 
-         {/* Category investment_dollar */}
+         {/* purchase investment_dollar */}
  <div className="mb-4">
           <label htmlFor="investment_dollar" className="mb-2 block text-sm font-medium">
           Investment $
@@ -177,23 +174,55 @@ export default function EditPurchaseForm({
         </div>
 
 
-         {/* Category Picture */}
- <div className="mb-4">
-          <label htmlFor="picture" className="mb-2 block text-sm font-medium">
-            Choose a picture
+
+         {/* Purchase Picture 2*/}
+         <div className="mb-4">
+          <label className="mb-2 block text-sm font-medium">
+            Images
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
-              <input
-                id="picture"
-                name="picture"
-                type="text"
-                defaultValue={purchase.images}
-                placeholder="Enter picture"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                aria-describedby="picture-error"
-              />
-              <PhotoIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+            <table className="hidden min-w-full text-gray-900 md:table">
+            <thead className="rounded-lg text-left text-xs font-normal">
+              <tr>
+                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
+                  No.
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Url
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Image
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white">
+              {purchase.images?.map((image, index) => (
+                <tr
+                  key={index+1}
+                  className="w-full border-b py-3 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                >
+                  <td className="whitespace-nowrap px-3 py-3">
+                    {index+1}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                    {image}
+                  </td>
+                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                    <div className="flex items-center gap-3">
+                      <Image
+                        src={image}
+                        className="mr-4 rounded-sm"
+                        width={40}
+                        height={40}
+                        alt={`${image}'s profile picture`}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
             </div>
             <div id="picture-error" aria-live="polite" aria-atomic="true">
         {state.errors?.picture &&
@@ -203,10 +232,9 @@ export default function EditPurchaseForm({
             </p>
           ))}
       </div>
+
           </div>
         </div>
-
-
 
 
         <div aria-live="polite" aria-atomic="true">
@@ -215,7 +243,10 @@ export default function EditPurchaseForm({
           ) : null}
         </div>
 
-        
+
+       
+
+
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
