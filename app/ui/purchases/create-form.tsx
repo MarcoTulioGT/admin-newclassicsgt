@@ -1,31 +1,45 @@
 'use client';
-
-import { BoxField, PurchasesForm } from '@/app/lib/definitions';
-import {
-  XCircleIcon, DocumentPlusIcon, CheckCircleIcon, ListBulletIcon, TagIcon, InformationCircleIcon, PhotoIcon,ArchiveBoxArrowDownIcon, CurrencyDollarIcon
-} from '@heroicons/react/24/outline';
+import { CategoryField, BoxField } from '@/app/lib/definitions';
 import Link from 'next/link';
+import {
+  CheckIcon,
+  ClockIcon,
+  CurrencyDollarIcon,
+  UserCircleIcon,
+  CalendarDaysIcon,
+  TruckIcon,
+  BanknotesIcon,
+  ArchiveBoxArrowDownIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  ListBulletIcon,
+  TagIcon,
+  InformationCircleIcon,
+  PhotoIcon,
+  DocumentPlusIcon
+} from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
-import { updatePurchase } from '@/app/lib/actions';
+import { createCategory } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
-import { formatDateToLocal, formatDateGT } from '@/app/lib/utils';
-import Image from 'next/image';
 
-export default function EditPurchaseForm({
-    purchase,
-    boxes,
-}: {
-    purchase: PurchasesForm;
-    boxes: BoxField[];
-}) {
-  
+export default function Form({ categories , boxes}: { purchases: CategoryField[] , boxes: BoxField[] }) { 
   
   const initialState = { message: null, errors: {} };
-  const updatePurchaseWithId = updatePurchase.bind(null, purchase.id);
-  const [state, dispatch] = useFormState(updatePurchaseWithId, initialState);
+  const [state, dispatch] = useFormState(createCategory, initialState);
 
-  
+  const handleInputChange = e => {
+    console.log(e.target.value)
+    const {name,value}= e.target
+   /* setValues({
+        ...values,
+        [name]:value
+    })
+    if(validateOnChange)
+    validate({ [name]: value})*/
+}
+
   return (
+    <div>
     <form action={dispatch}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
 
@@ -41,7 +55,7 @@ export default function EditPurchaseForm({
                 id="noitem"
                 name="noitem"
                 type="text"
-                defaultValue={purchase.noitem}
+                
                 placeholder="Enter order number"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="noitem-error"
@@ -69,7 +83,7 @@ export default function EditPurchaseForm({
               id="box"
               name="box_id"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue={purchase.box_id}
+
             >
               <option value="" disabled>
                 Select a box
@@ -86,6 +100,8 @@ export default function EditPurchaseForm({
 
 
 
+
+
   {/* purchase Name */}
   <div className="mb-4">
           <label htmlFor="name" className="mb-2 block text-sm font-medium">
@@ -97,7 +113,7 @@ export default function EditPurchaseForm({
                 id="name"
                 name="name"
                 type="text"
-                defaultValue={purchase.name}
+
                 placeholder="Enter name"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="name-error"
@@ -115,6 +131,40 @@ export default function EditPurchaseForm({
           </div>
         </div>
 
+                {/* Parentid Name */}
+                <div className="mb-4">
+          <label htmlFor="parentid" className="mb-2 block text-sm font-medium">
+            Choose parent category
+          </label>
+          <div className="relative">
+            <select
+              id="parentid"
+              name="parentid"
+              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              defaultValue=""
+              aria-describedby="parentid-error"
+            >
+              <option value="" disabled>
+                Select a categories
+              </option>
+              {categories.map((category) => (
+                <option key={category.id == null ? 0: category.id} value={category.id == null ? 0: category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            <TagIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+          </div>
+          <div id="parentid-error" aria-live="polite" aria-atomic="true">
+        {state.errors?.parentid &&
+          state.errors.parentid.map((error: string) => (
+            <p className="mt-2 text-sm text-red-500" key={error}>
+              {error}
+            </p>
+          ))}
+      </div>
+        </div>
+
  {/* purchase qty */}
  <div className="mb-4">
           <label htmlFor="qty" className="mb-2 block text-sm font-medium">
@@ -127,7 +177,8 @@ export default function EditPurchaseForm({
                 name="qty"
                 type="number"
                 step="1"
-                defaultValue={purchase.qty}
+                value={values.qty}
+                onChange={handleInputChange}
                 placeholder="Enter qty"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="qty-error"
@@ -156,7 +207,7 @@ export default function EditPurchaseForm({
                 id="investment_dollar"
                 name="investment_dollar"
                 type="text"
-                defaultValue={purchase.investment_dollar}
+
                 placeholder="Enter investment_dollar"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="investment_dollar-error"
@@ -175,65 +226,31 @@ export default function EditPurchaseForm({
         </div>
 
 
-
-         {/* Purchase Picture 2*/}
+         {/* purchase cost. U $ */}
          <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium">
-            Images
+          <label htmlFor="cost" className="mb-2 block text-sm font-medium">
+          Cost U.$
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
-            <table className="hidden min-w-full text-gray-900 md:table">
-            <thead className="rounded-lg text-left text-xs font-normal">
-              <tr>
-                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                  No.
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Url
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Image
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white">
-              {purchase.images?.map((image, index) => (
-                <tr
-                  key={index+1}
-                  className="w-full border-b py-3 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
-                >
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {index+1}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {image}
-                  </td>
-                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    <div className="flex items-center gap-3">
-                      <Image
-                        src={image}
-                        className="mr-4 rounded-sm"
-                        width={40}
-                        height={40}
-                        alt={`${image}'s profile picture`}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              <input
+                id="cost"
+                name="cost"
+                type="text"
+                value={state.qty}
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="cost-error"
+              />
+              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
-            <div id="picture-error" aria-live="polite" aria-atomic="true">
-        {state.errors?.picture &&
-          state.errors.picture.map((error: string) => (
+            <div id="cost-error" aria-live="polite" aria-atomic="true">
+        {state.errors?.cost&&
+          state.errors.cost.map((error: string) => (
             <p className="mt-2 text-sm text-red-500" key={error}>
               {error}
             </p>
           ))}
       </div>
-
           </div>
         </div>
 
@@ -256,8 +273,49 @@ export default function EditPurchaseForm({
         >
           Cancel
         </Link>
-        <Button type="submit">Edit Purchase</Button>
+        <Button type="submit">+ Add</Button>
       </div>
     </form>
+
+
+    <div>
+            <table className="hidden min-w-full text-gray-900 md:table">
+            <thead className="rounded-lg text-left text-xs font-normal">
+              <tr>
+                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
+                  Item number
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Box
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Name
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white">
+              {categories.map((category, index) => (
+                <tr
+                  key={index}
+                  className="w-full border-b py-3 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                >
+                  <td className="whitespace-nowrap px-3 py-3">
+                    {index}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                    {category.name}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                    {category.id}
+                  </td>
+ 
+                </tr>
+              ))}
+            </tbody>
+          </table>
+    </div>
+    </div>
+
+
   );
 }

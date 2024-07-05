@@ -29,14 +29,15 @@ const FormSchemaCategory = z.object({
   //create_date: z.string(),
 });
 
-const FormSchemaPurchase =z.object({
-id: z.string(),
-name: z.string(),
-noitem: z.string(),
-qty: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
-investment_dollar: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
-box_id: z.string(),
-});
+
+  const FormSchemaPurchase =z.object({
+  id: z.string(),
+  name: z.string(),
+  noitem: z.string(),
+  qty: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
+  investment_dollar: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+  box_id: z.string(),
+  });
 
 
 const CreateBox = FormSchema.omit({ id: true, box_id: true  });
@@ -177,7 +178,7 @@ export async function updateCategory(id: string, prevState: State, formData: For
 
 export async function updatePurchase(id: string, prevState: State, formData: FormData) {
 
-  console.log(formData)
+
   const validatedFields = UpdatePurchase.safeParse({
   noitem: formData.get('noitem'),
   box_id: formData.get('box_id'),

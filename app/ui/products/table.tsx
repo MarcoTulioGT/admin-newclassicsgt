@@ -12,7 +12,7 @@ export default async function ProductsTable({
   currentPage: number;
 }) {
   const products = await fetchFilteredProducts(query, currentPage);
- console.log(products)
+
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">

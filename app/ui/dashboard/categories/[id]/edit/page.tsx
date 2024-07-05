@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       if (!category) {
         notFound();
       }
-      console.log(category)  
+
   return (
     <main>
       <Breadcrumbs
