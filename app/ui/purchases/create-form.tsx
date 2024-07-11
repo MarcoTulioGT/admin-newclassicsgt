@@ -20,10 +20,10 @@ import {
   ReceiptPercentIcon
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
-import { createCategory } from '@/app/lib/actions';
+import { createPurchase } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import { useState, useEffect } from 'react';
-import { formatDateToLocal, formatDateGT, DollarToQt } from '@/app/lib/utils';
+import { formatDateToLocal, formatDateGT, DollarToQt, floatToNumber} from '@/app/lib/utils';
 
 
 export default function Form({ categories , boxes}: { purchases: CategoryField[] , boxes: BoxField[] }) { 
@@ -34,7 +34,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
   const [costshipusValue, setCostshipus] = useState(1);
   const [costshipgtValue, setCostshipgt] = useState(DollarToQt(1));
   const [muValue, setMU] = useState(25);
-  const [state, dispatch] = useFormState(createCategory, initialState);
+  const [state, dispatch] = useFormState(createPurchase, initialState);
 
   const handleInputChangeQty = e => {
     console.log(e.target.value)
@@ -115,8 +115,8 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
                 Select a box
               </option>
               {boxes.map((box) => (
-                <option key={box.id} value={box.box_id}>
-                  {box.box_id+"_"+box.status}
+                <option key={box.id} value={box.id}>
+                  {box.box_id+"_"+box.status+"_"+box.id}
                 </option>
               ))}
             </select>
@@ -233,7 +233,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
               <input
                 id="investment_dollar"
                 name="investment_dollar"
-                type="number"
+                type="text"
                 min="1"
                 value={invValue}
                 onChange={handleInputChangeInv}
@@ -265,7 +265,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
               <input
                 id="cost"
                 name="cost"
-                type="number"
+                type="text"
                 value={(invValue/qtyValue).toFixed(2) == 'Infinity' ? 0: (invValue/qtyValue).toFixed(2) }
                 className="peer block w-full rounded-md border  bg-gray-300 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
                 aria-describedby="cost-error"
@@ -295,7 +295,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
               <input
                 id="costotal"
                 name="costotal"
-                type="number"
+                type="text"
                 value={DollarToQt(invValue)}
                 className="peer block w-full rounded-md border  bg-gray-300 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
                 aria-describedby="costotal-error"
@@ -323,7 +323,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
               <input
                 id="costshipUS"
                 name="costshipUS"
-                type="number"
+                type="text"
                 min="1"
                 value={costshipusValue}
                 onChange={handleInputChangeCostshipUS}
@@ -380,7 +380,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
               <input
                 id="costtotalshippingU"
                 name="costtotalshippingU"
-                type="number"
+                type="text"
                 value={(Number(costshipusValue)+Number(costshipgtValue)).toFixed(2) == 'Infinity' ? 0: (Number(costshipusValue)+Number(costshipgtValue)).toFixed(2)  }
                 className="peer block w-full rounded-md border border-gray-200   bg-gray-300 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
                 aria-describedby="costtotalshippingU-error"
@@ -415,7 +415,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
               <input
                 id="costtotalbypurchase"
                 name="costtotalbypurchase"
-                type="number"
+                type="text"
                 value={(Number(costshipgtValue)*Number(qtyValue)/DollarToQt(1)).toFixed(2) == 'Infinity' ? 0: (Number(costshipgtValue)*Number(qtyValue)/DollarToQt(1)).toFixed(2)  }
                 className="peer block w-full rounded-md border border-gray-200   bg-gray-300 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
                 aria-describedby="costtotalbypurchase-error"
@@ -450,7 +450,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
               <input
                 id="costsaleuq"
                 name="costsaleuq"
-                type="number"
+                type="text"
                 value={(((invValue/qtyValue)*DollarToQt(1))+(Number(costshipusValue)+Number(costshipgtValue))).toFixed(2)  }
                 className="peer block w-full rounded-md border border-gray-200   bg-gray-300 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
                 aria-describedby="costsaleuq-error"
@@ -511,7 +511,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
               <input
                 id="pricesaleuq"
                 name="pricesaleuq"
-                type="number"
+                type="text"
                 value={(Math.floor((((invValue/qtyValue)*DollarToQt(1))+(Number(costshipusValue)+Number(costshipgtValue)))/(1-(muValue/100)))).toFixed(2) }
                 //value={Math.floor(59.48/(1-(34/100)))}
                 className="peer block w-full rounded-md border border-gray-200  bg-gray-300 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
@@ -541,7 +541,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
               <input
                 id="utility"
                 name="utility"
-                type="number"
+                type="text"
 
                 value={(( (Math.floor((((invValue/qtyValue)*DollarToQt(1))+(Number(costshipusValue)+Number(costshipgtValue)))/(1-(muValue/100)))).toFixed(2) )  -   (((invValue/qtyValue)*DollarToQt(1))+(Number(costshipusValue)+Number(costshipgtValue))).toFixed(2) ).toFixed(2)  }
                 className="peer block w-full rounded-md border border-gray-200  bg-gray-300 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
@@ -574,7 +574,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
               <input
                 id="totalutilitybyp"
                 name="totalutilitybyp"
-                type="number"
+                type="text"
                 value={((((Math.floor((((invValue/qtyValue)*DollarToQt(1))+(Number(costshipusValue)+Number(costshipgtValue)))/(1-(muValue/100)))).toFixed(2) )  -   (((invValue/qtyValue)*DollarToQt(1))+(Number(costshipusValue)+Number(costshipgtValue))).toFixed(2))   * qtyValue).toFixed(2)}
                 className="peer block w-full rounded-md border border-gray-200  bg-gray-300 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
                 aria-describedby="totalutilitybyp-error"

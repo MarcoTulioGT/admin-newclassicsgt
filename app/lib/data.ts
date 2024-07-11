@@ -231,10 +231,20 @@ export async function fetchFilteredPurchases ( query: string,
       purchases.name,
       purchases.noitem,
       purchases.qty,
-      purchases.price,
+      purchases.cost,
       purchases.investment_dollar,
       purchases.images,
-      purchases.box_id,
+      (select box_id from boxes where id = purchases.box_id) box_id,
+      purchases.costotal,
+      purchases.costshipus,
+      purchases.costshippinggt,
+      purchases.costtotalbypurchase,
+      purchases.costsaleuq,
+      purchases.mu,
+      purchases.pricesaleuq,
+      purchases.utility,
+      purchases.totalutilitybyp,
+      purchases.costtotalshippingu,
       purchases.create_date,
       purchases.updated_date
       FROM purchases
@@ -465,7 +475,6 @@ export async function fetchPurchasesPages(query: string){
     WHERE
     purchases.name ILIKE ${`%${query}%`} OR
     purchases.noitem ILIKE ${`%${query}%`} OR
-    purchases.box_id ILIKE ${`%${query}%`} OR
     purchases.create_date::text ILIKE ${`%${query}%`}
   `;
 

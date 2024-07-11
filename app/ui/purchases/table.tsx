@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { UpdateBox, DeletePurchase } from '@/app/ui/purchases/buttons';
 import CategoryStatus from '@/app/ui/categories/status';
-import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
+import { formatDateToLocal, formatCurrency, formatCurrencyGT, formatPercent } from '@/app/lib/utils';
 import { fetchFilteredPurchases } from '@/app/lib/data';
 
 export default async function PurchasesTable({
@@ -46,34 +46,65 @@ export default async function PurchasesTable({
           <table className="hidden min-w-full text-gray-600 sm:table">
             <thead className="rounded-lg text-left text-xs font-normal">
               <tr>
-              <th scope="col" className="px-4 py-2 font-medium sm:pl-6">
-                  Id
-                </th>
-                <th scope="col" className="px-4 py-2 font-medium sm:pl-6">
-                  No Item
-                </th>
-                <th scope="col" className="px-4 py-2 font-medium sm:pl-6">
-                  Name
-                </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Qty
-                </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Cost U. $
-                </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Investment $
-                </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Images
-                </th>
-                <th scope="col" className="px-3 py-2 font-medium">
+                <th scope="col" className="px-3 py-2 font-normal">
                   Box
                 </th>
-                <th scope="col" className="px-3 py-2 font-medium">
+                <th scope="col" className="px-4 py-2 font-normal sm:pl-6">
+                  No Item
+                </th>
+                <th scope="col" className="px-4 py-2 font-normal sm:pl-6">
+                  Name
+                </th>
+                <th scope="col" className="px-3 py-2 font-normal">
+                  Qty
+                </th>
+                <th scope="col" className="px-3 py-2 font-normal">
+                  Cost U. $
+                </th>
+                <th scope="col" className="px-3 py-2 font-normal">
+                  Investment $
+                </th>
+                <th scope="col" className="px-3 py-2 font-normal">
+                  Costo Total Q
+                </th>
+                <th scope="col" className="px-3 py-2 font-normal">
+                  Cost Shipping US Q
+                </th>
+                <th scope="col" className="px-3 py-2 font-normal">
+                  Cost Shipping GT Q
+                </th>
+                <th scope="col" className="px-3 py-2 font-normal">
+                  Cost Total Shipping U. G
+                </th>
+                <th scope="col" className="px-3 py-2 font-normal">
+                  Cost Total By Purchase
+                </th>
+                <th scope="col" className="px-3 py-2 font-normal">
+                  Cost Sale U. Q
+                </th>
+                <th scope="col" className="px-3 py-2 font-normal">
+                  MU
+                </th>
+                <th scope="col" className="px-3 py-2 font-normal">
+                  Price Sale U. GTQ
+                </th>
+                <th scope="col" className="px-3 py-2 font-normal">
+                  Utility
+                </th>
+                <th scope="col" className="px-3 py-2 font-normal">
+                  Total Utility by Purchase
+                </th>
+
+                <th scope="col" className="px-3 py-2 font-normal">
+                  Images
+                </th>
+                <th scope="col" className="px-4 py-2 font-normal sm:pl-6">
+                  Id
+                </th>
+                <th scope="col" className="px-3 py-2 font-normal">
                   Created Date
                 </th>
-                <th scope="col" className="px-3 py-2 font-medium">
+                <th scope="col" className="px-3 py-2 font-normal">
                   Updated Date
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
@@ -86,8 +117,8 @@ export default async function PurchasesTable({
                 <tr
                   key={purchase.id}
                   className="w-full border py-3 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg hover:bg-gray-50">
-                  <td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-300">
-                    {purchase.id}
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {purchase.box_id}
                   </td>
                   <td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-300">
                     {purchase.noitem}
@@ -99,12 +130,41 @@ export default async function PurchasesTable({
                     {purchase.qty}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {formatCurrency(purchase.price)}
+                   {formatCurrency(purchase.cost)}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {formatCurrency(purchase.investment_dollar)}
                   </td>
-                  
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {formatCurrencyGT(purchase.costotal)}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {formatCurrencyGT(purchase.costshipus)}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {formatCurrencyGT(purchase.costshippinggt)}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {formatCurrencyGT(purchase.costtotalshippingu)}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {formatCurrencyGT(purchase.costtotalbypurchase)}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {formatCurrencyGT(purchase.costsaleuq)}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {formatPercent(purchase.mu)}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {formatCurrencyGT(purchase.pricesaleuq)}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {formatCurrencyGT(purchase.utility)}
+                  </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                   {formatCurrencyGT(purchase.totalutilitybyp)}
+                  </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">           
                   <Image
                     src= {purchase.images[0]}
@@ -114,8 +174,8 @@ export default async function PurchasesTable({
                     height={40}
                   />         
                   </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {purchase.box_id}
+                  <td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-300">
+                    {purchase.id}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {formatDateToLocal(purchase.create_date)}

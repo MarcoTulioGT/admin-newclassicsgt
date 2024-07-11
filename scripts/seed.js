@@ -122,13 +122,23 @@ CREATE TABLE IF NOT EXISTS boxes (
 
         CREATE TABLE IF NOT EXISTS purchases (
             id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
-            noitem VARCHAR(500) NOT NULL,
+            noitem VARCHAR(100) NOT NULL,
+            box_id UUID,
+            name VARCHAR(250) NOT NULL,
             qty INT NOT NULL,
             price INT NOT NULL,
             investment_dollar INT NOT NULL,
+            cost INT NOT NULL,
+            costotal INT NOT NULL,
+            costshipUS INT NOT NULL,
+            costShippingGT INT NOT NULL,
+            costtotalbypurchase INT NOT NULL,
+            costsaleuq INT NOT NULL,
+            mu INT NOT NULL,
+            pricesaleuq INT NOT NULL,
+            utility INT NOT NULL,
+            totalutilitybyp INT NOT NULL,
             images TEXT [],
-            box_id VARCHAR(100) NOT NULL,
             create_date DATE NOT NULL default CURRENT_DATE ,
             updated_date DATE NOT NULL default CURRENT_DATE );
 

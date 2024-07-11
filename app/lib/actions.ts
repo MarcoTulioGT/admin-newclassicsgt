@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
+import { floatToNumber} from '@/app/lib/utils';
 
 const FormSchema = z.object({
   id: z.string(),
@@ -32,11 +33,22 @@ const FormSchemaCategory = z.object({
 
   const FormSchemaPurchase =z.object({
   id: z.string(),
-  name: z.string(),
   noitem: z.string(),
+  box_id: z.string(),
+  name: z.string(),
   qty: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
   investment_dollar: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
-  box_id: z.string(),
+  cost: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+  costotal: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+  costshipUS: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+  costShippingGT: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+  costtotalshippingU: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+  costtotalbypurchase: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+  costsaleuq: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+  mu: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
+  pricesaleuq: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
+  utility: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
+  totalutilitybyp: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
   });
 
 
@@ -46,7 +58,7 @@ const UpdateBox = FormSchema.omit({ id: true, box_id: true });
 const CreateCategory = FormSchemaCategory.omit({ id: true });
 const UpdateCategory = FormSchemaCategory.omit({ id: true, parentid: true});
 
-//const CreateCategory = FormSchemaCategory.omit({ id: true });
+const CreatePurchase = FormSchemaPurchase.omit({ id: true });
 const UpdatePurchase = FormSchemaPurchase.omit({ id: true});
 
 
@@ -295,6 +307,66 @@ export async function createCategory(prevState: State, formData: FormData) {
     revalidatePath('/ui/dashboard/categories');
     redirect('/ui/dashboard/categories');
 }
+
+
+export async function createPurchase(prevState: State, formData: FormData) {
+   console.log(formData)
+  // Validate form using Zod
+    const validatedFields = CreatePurchase.safeParse({
+    noitem: formData.get("noitem"),
+    box_id: formData.get("box_id"),
+    name: formData.get('name'),
+    qty: formData.get('qty'),
+    investment_dollar: formData.get('investment_dollar'),
+    cost: formData.get('cost'),
+    costotal: formData.get('costotal'),
+    costshipUS: formData.get('costshipUS'),
+    costShippingGT: formData.get('costShippingGT'),
+    costtotalshippingU: formData.get('costtotalshippingU'),
+    costtotalbypurchase: formData.get('costtotalbypurchase'),
+    costsaleuq: formData.get('costsaleuq'),
+    mu: formData.get('mu'),
+    pricesaleuq: formData.get('pricesaleuq'),
+    utility: formData.get('utility'),
+    totalutilitybyp: formData.get('totalutilitybyp'),
+
+    });
+
+    // If form validation fails, return errors early. Otherwise, continue.
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Create purchase.',
+    };
+  }
+    
+     // Prepare data for insertion into the database
+    const { noitem, box_id, name, qty, investment_dollar, cost, costotal, costshipUS, costShippingGT, 
+            costtotalshippingU, costtotalbypurchase, costsaleuq, mu, pricesaleuq, utility, totalutilitybyp} = validatedFields.data;
+    console.log(investment_dollar)
+    try {
+    await sql`
+    INSERT INTO purchases (noitem, box_id, name, qty, investment_dollar, cost, costotal, costshipUS, costShippingGT, 
+      costtotalshippingU, costtotalbypurchase, costsaleuq, mu, pricesaleuq, utility, totalutilitybyp, images)
+    VALUES (${noitem}, ${box_id}, ${name}, ${qty}, ${floatToNumber(investment_dollar)}, ${floatToNumber(cost)}, ${floatToNumber(costotal)},
+            ${floatToNumber(costshipUS)}, ${floatToNumber(costShippingGT)}, ${floatToNumber(costtotalshippingU)}, 
+            ${floatToNumber(costtotalbypurchase)}, ${floatToNumber(costsaleuq)}, ${mu}, ${pricesaleuq}, ${floatToNumber(utility)},
+             ${floatToNumber(totalutilitybyp)},
+            ARRAY ['https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_1.jpg','https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_2.jpg','https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_3.jpg'])
+    ON CONFLICT (id) DO NOTHING
+  `;
+    } catch (error){
+      console.log(error)
+      return {
+        message: 'Database Error: Failed to Create Purchase.',
+      };
+    }
+
+  // Revalidate the cache for the categories page and redirect the user.
+  revalidatePath('/ui/dashboard/purchases');
+  redirect('/ui/dashboard/purchases');
+}
+
 
 export async function authenticate(
   prevState: string | undefined,

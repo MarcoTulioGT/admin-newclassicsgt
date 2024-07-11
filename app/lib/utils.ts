@@ -7,6 +7,21 @@ export const formatCurrency = (amount: number) => {
   });
 };
 
+export const formatPercent= (data: number) => {
+  return (data/ 100).toLocaleString(undefined, {
+    style: 'percent',
+    minimumFractionDigits:2,
+  });
+};
+
+
+export const formatCurrencyGT = (amount: number) => {
+  return (amount / 100).toLocaleString('en-GT', {
+    style: 'currency',
+    currency: 'GTQ',
+  });
+};
+
 export const formatDateToLocal = (
   dateStr: string,
   locale: string = 'en-US',
@@ -40,6 +55,14 @@ export const DollarToQt = (
    return(quetzales.toFixed(2))
 };
 
+export const floatToNumber = (
+  data: string,
+) => {
+  console.log(data)
+  const numericdata = Number(data*100)
+  console.log(numericdata)
+  return(numericdata)
+}
 
 export const generatePagination = (currentPage: number, totalPages: number) => {
   // If the total number of pages is 7 or less,
