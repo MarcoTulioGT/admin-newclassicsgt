@@ -33,6 +33,13 @@ export const formatDateGT = (
   return formatter
 };
 
+export const DollarToQt = (
+  investment: number,
+) => {
+   const quetzales = investment*7.9;
+   return(quetzales.toFixed(2))
+};
+
 
 export const generatePagination = (currentPage: number, totalPages: number) => {
   // If the total number of pages is 7 or less,
