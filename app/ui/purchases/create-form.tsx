@@ -35,33 +35,36 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
   const [costshipgtValue, setCostshipgt] = useState(DollarToQt(1));
   const [muValue, setMU] = useState(25);
   const [state, dispatch] = useFormState(createPurchase, initialState);
+  const [countImages, setCountImages] = useState(3)
 
   const handleInputChangeQty = e => {
-    console.log(e.target.value)
-    console.log(e.target.name)
-    setQty(e.target.value)
+      setQty(e.target.value)
     }
 
     const handleInputChangeInv = e => {
-      console.log(e.target.value)
-      console.log(e.target.name)
       setInv(e.target.value)
       }
 
     const handleInputChangeCostshipUS = e => {
-    console.log(typeof e.target.value)
     setCostshipus(e.target.value)
     }
     
     const handleInputChangeCostShippingGT = e => {
-      console.log(typeof e.target.value)
       setCostshipgt(e.target.value)
     }
 
 
     const handleInputChangeMU = e => {
-      console.log(typeof e.target.value)
-      setMU(e.target.value)
+       setMU(e.target.value)
+    }
+
+    const inputImage = () => {
+      let content = [];
+      for (let i = 0; i < countImages.length; i++) {
+        console.log(i)
+          content.push(<input key={i} type="url" value="image" />);
+      }
+      return content;
     }
 
   return (
@@ -592,6 +595,37 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
           </div>
         </div>
 
+      
+        {/* Image 1 %*/}
+ <div className="mb-4">
+          <label htmlFor="image1" className="mb-2 block text-xs font-medium">
+          Images
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="image1"
+                name="image1"
+                type="url"
+               
+                placeholder="Enter image1"
+                className="peer block w-full rounded-md border bg-sky-100 hover:bg-yellow-50 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
+                aria-describedby="mimage1u-error"
+              />
+              <PhotoIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+            </div>
+            <div id="image1-error" aria-live="polite" aria-atomic="true">
+        {state.errors?.image1 &&
+          state.errors.image1.map((error: string) => (
+            <p className="mt-2 text-xs text-red-500" key={error}>
+              {error}
+            </p>
+          ))}
+      </div>
+          </div>
+        </div>
+
+      <button type="button" onClick={inputImage()}>+ Image</button>
 
 
 
@@ -610,7 +644,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
         >
           Cancel
         </Link>
-        <Button type="submit">+ Add</Button>
+        <Button type="submit">Add Purchase</Button>
       </div>
     </form>
     <div>

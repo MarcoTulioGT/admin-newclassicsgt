@@ -61,9 +61,9 @@ export default async function PurchasesTable({
                 <th scope="col" className="px-3 py-2 font-normal">
                   Cost U. $
                 </th>
-                <th scope="col" className="px-3 py-2 font-normal">
+                {/*<th scope="col" className="px-3 py-2 font-normal">
                   Investment $
-                </th>
+            </th>*/}
                 <th scope="col" className="px-3 py-2 font-normal">
                   Costo Total Q
                 </th>
@@ -98,15 +98,15 @@ export default async function PurchasesTable({
                 <th scope="col" className="px-3 py-2 font-normal">
                   Images
                 </th>
-                <th scope="col" className="px-4 py-2 font-normal sm:pl-6">
+               {/* <th scope="col" className="px-4 py-2 font-normal sm:pl-6">
                   Id
-                </th>
+          </th>
                 <th scope="col" className="px-3 py-2 font-normal">
                   Created Date
                 </th>
                 <th scope="col" className="px-3 py-2 font-normal">
                   Updated Date
-                </th>
+                </th>*/}
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
                 </th>
@@ -132,9 +132,9 @@ export default async function PurchasesTable({
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {formatCurrency(purchase.cost)}
                   </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                 {/* <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {formatCurrency(purchase.investment_dollar)}
-                  </td>
+              </td>*/}
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {formatCurrencyGT(purchase.costotal)}
                   </td>
@@ -174,15 +174,15 @@ export default async function PurchasesTable({
                     height={40}
                   />         
                   </td>
-                  <td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-300">
+                  {/*<td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-300">
                     {purchase.id}
-                  </td>
+            </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {formatDateToLocal(purchase.create_date)}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {formatDateToLocal(purchase.updated_date)}
-                  </td>
+                  </td>*/}
                   <td className="whitespace-nowrap py-1 pl-6 pr-3 hover:border hover:border-blue-300">
                     <div className="flex justify-end gap-1">
                      <UpdateBox id={purchase.id} />

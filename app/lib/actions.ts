@@ -49,6 +49,7 @@ const FormSchemaCategory = z.object({
   pricesaleuq: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
   utility: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
   totalutilitybyp: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
+  images: z.string(),
   });
 
 
@@ -329,6 +330,7 @@ export async function createPurchase(prevState: State, formData: FormData) {
     pricesaleuq: formData.get('pricesaleuq'),
     utility: formData.get('utility'),
     totalutilitybyp: formData.get('totalutilitybyp'),
+    images: formData.get('image1')
 
     });
 
@@ -342,8 +344,8 @@ export async function createPurchase(prevState: State, formData: FormData) {
     
      // Prepare data for insertion into the database
     const { noitem, box_id, name, qty, investment_dollar, cost, costotal, costshipUS, costShippingGT, 
-            costtotalshippingU, costtotalbypurchase, costsaleuq, mu, pricesaleuq, utility, totalutilitybyp} = validatedFields.data;
-    console.log(investment_dollar)
+            costtotalshippingU, costtotalbypurchase, costsaleuq, mu, pricesaleuq, utility, totalutilitybyp, images} = validatedFields.data;
+    console.log(images)
     try {
     await sql`
     INSERT INTO purchases (noitem, box_id, name, qty, investment_dollar, cost, costotal, costshipUS, costShippingGT, 
@@ -352,7 +354,7 @@ export async function createPurchase(prevState: State, formData: FormData) {
             ${floatToNumber(costshipUS)}, ${floatToNumber(costShippingGT)}, ${floatToNumber(costtotalshippingU)}, 
             ${floatToNumber(costtotalbypurchase)}, ${floatToNumber(costsaleuq)}, ${mu}, ${pricesaleuq}, ${floatToNumber(utility)},
              ${floatToNumber(totalutilitybyp)},
-            ARRAY ['https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_1.jpg','https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_2.jpg','https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_3.jpg'])
+            ARRAY [${images}])
     ON CONFLICT (id) DO NOTHING
   `;
     } catch (error){
