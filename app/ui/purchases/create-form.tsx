@@ -362,11 +362,31 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
               className="peer block w-full cursor-pointer rounded-md border  bg-gray-300 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
               >
               <option value="" disabled>   Select a shipping cost </option>
+              <option key="0" value={DollarToQt(1/2)}>$.0.50 -  Q.{DollarToQt(1/2)}</option>
               <option key="1" value={DollarToQt(1)}>$.1.00  -  Q.{DollarToQt(1)}</option>
               <option key="2" value={DollarToQt(2)}>$.2.00  -  Q.{DollarToQt(2)}</option>
               <option key="3" value={DollarToQt(3)}>$.3.00  -  Q.{DollarToQt(3)}</option>
               <option key="4" value={DollarToQt(4)}>$.4.00  -  Q.{DollarToQt(4)}</option>
               <option key="5" value={DollarToQt(5)}>$.5.00  -  Q.{DollarToQt(5)}</option>
+              <option key="5" value={DollarToQt(6)}>$.6.00  -  Q.{DollarToQt(6)}</option>
+              <option key="5" value={DollarToQt(7)}>$.7.00  -  Q.{DollarToQt(7)}</option>
+              <option key="5" value={DollarToQt(8)}>$.8.00  -  Q.{DollarToQt(8)}</option>
+              <option key="5" value={DollarToQt(9)}>$.9.00  -  Q.{DollarToQt(9)}</option>
+              <option key="5" value={DollarToQt(10)}>$.10.00  -  Q.{DollarToQt(10)}</option>
+              <option key="5" value={DollarToQt(11)}>$.11.00  -  Q.{DollarToQt(11)}</option>
+              <option key="5" value={DollarToQt(12)}>$.12.00  -  Q.{DollarToQt(12)}</option>
+              <option key="5" value={DollarToQt(13)}>$.13.00  -  Q.{DollarToQt(13)}</option>
+              <option key="5" value={DollarToQt(14)}>$.14.00  -  Q.{DollarToQt(14)}</option>
+              <option key="5" value={DollarToQt(15)}>$.15.00  -  Q.{DollarToQt(15)}</option>
+              <option key="5" value={DollarToQt(16)}>$.16.00  -  Q.{DollarToQt(16)}</option>
+              <option key="5" value={DollarToQt(17)}>$.17.00  -  Q.{DollarToQt(17)}</option>
+              <option key="5" value={DollarToQt(18)}>$.18.00  -  Q.{DollarToQt(18)}</option>
+              <option key="5" value={DollarToQt(20)}>$.20.00  -  Q.{DollarToQt(20)}</option>
+              <option key="5" value={DollarToQt(25)}>$.25.00  -  Q.{DollarToQt(25)}</option>
+              <option key="5" value={DollarToQt(28)}>$.28.00  -  Q.{DollarToQt(28)}</option>
+              <option key="5" value={DollarToQt(29)}>$.29.00  -  Q.{DollarToQt(29)}</option>
+              <option key="5" value={DollarToQt(30)}>$.30.00  -  Q.{DollarToQt(30)}</option>
+              <option key="5" value={DollarToQt(41)}>$.41.00  -  Q.{DollarToQt(41)}</option>
             </select>
             <ArchiveBoxArrowDownIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
@@ -482,7 +502,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
                 id="mu"
                 name="mu"
                 type="number"
-                min="1"
+                min="-100"
                 value={muValue}
                 step="1"
                 onChange={handleInputChangeMU}

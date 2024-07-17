@@ -75,7 +75,7 @@ export default function EditPurchaseForm({
                 Select a box
               </option>
               {boxes.map((box) => (
-                <option key={box.id} value={box.box_id}>
+                <option key={box.id} value={box.id}>
                   {box.box_id+"_"+box.status}
                 </option>
               ))}

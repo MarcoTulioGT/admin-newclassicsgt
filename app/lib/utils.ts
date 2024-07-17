@@ -60,8 +60,8 @@ export const floatToNumber = (
 ) => {
   console.log(data)
   const numericdata = Number(data*100)
-  console.log(numericdata)
-  return(numericdata)
+  console.log(numericdata.toFixed(0))
+  return(numericdata.toFixed(0))
 }
 
 export const generatePagination = (currentPage: number, totalPages: number) => {

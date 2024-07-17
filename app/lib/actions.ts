@@ -45,10 +45,10 @@ const FormSchemaCategory = z.object({
   costtotalshippingU: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
   costtotalbypurchase: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
   costsaleuq: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
-  mu: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
+  mu: z.coerce.number().gt(-100, { message: 'Please enter a mu greater or equal 0.' }),
   pricesaleuq: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
-  utility: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
-  totalutilitybyp: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
+  utility: z.coerce.number().gt(-100, { message: 'Please enter a utility greater or equal 0.' }),
+  totalutilitybyp: z.coerce.number().gt(-1000, { message: 'Please enter a totalutilitybyp greater or equal 0.' }),
   images: z.string(),
   });
 
@@ -60,7 +60,9 @@ const CreateCategory = FormSchemaCategory.omit({ id: true });
 const UpdateCategory = FormSchemaCategory.omit({ id: true, parentid: true});
 
 const CreatePurchase = FormSchemaPurchase.omit({ id: true });
-const UpdatePurchase = FormSchemaPurchase.omit({ id: true});
+const UpdatePurchase = FormSchemaPurchase.omit({ id: true, cost: true, costotal: true, costshipUS: true, costShippingGT: true, 
+  costtotalshippingU: true, costtotalbypurchase: true, costsaleuq: true, mu: true, pricesaleuq: true, utility: true,
+  totalutilitybyp: true, images: true});
 
 
 
@@ -92,7 +94,7 @@ export async function createBox(prevState: State, formData: FormData) {
      // Prepare data for insertion into the database
     const { delivery_date, cost, status } = validatedFields.data;
     const amountInCents = cost * 100;
-    const created_date = new Date()
+    const created_date = new Date(delivery_date)
     const yyyy = created_date.getFullYear();
     let mm = created_date.getMonth() + 1; // Months start at 0!
     let dd = created_date.getDate();
@@ -135,12 +137,21 @@ export async function updateBox(id: string, prevState: State, formData: FormData
  
    const {  cost, delivery_date, status } = validatedFields.data;
    const costInCents = cost * 100;
+   const created_date = new Date(delivery_date)
+   const yyyy = created_date.getFullYear();
+   let mm = created_date.getMonth() + 1; // Months start at 0!
+   let dd = created_date.getDate();
+
+   if (dd < 10) dd = '0' + dd;
+   if (mm < 10) mm = '0' + mm;
+
+   const name_box_id = 'box_'+dd+mm+yyyy
 
 
    try {
    await sql`
      UPDATE boxes
-     SET cost = ${costInCents}, delivery_date = ${delivery_date}, status = ${status}
+     SET cost = ${costInCents}, delivery_date = ${delivery_date}, status = ${status}, box_id =${name_box_id}
      WHERE id = ${id}
    `;
    }catch (error){
@@ -224,7 +235,7 @@ export async function updatePurchase(id: string, prevState: State, formData: For
      WHERE id = ${id}
    `;
    }catch (error){
-
+     console.log(error)
      return { message: 'Database Error: Failed to Update Purchase.'};
    }
   
@@ -345,7 +356,7 @@ export async function createPurchase(prevState: State, formData: FormData) {
      // Prepare data for insertion into the database
     const { noitem, box_id, name, qty, investment_dollar, cost, costotal, costshipUS, costShippingGT, 
             costtotalshippingU, costtotalbypurchase, costsaleuq, mu, pricesaleuq, utility, totalutilitybyp, images} = validatedFields.data;
-    console.log(images)
+    console.log(cost)
     try {
     await sql`
     INSERT INTO purchases (noitem, box_id, name, qty, investment_dollar, cost, costotal, costshipUS, costShippingGT, 

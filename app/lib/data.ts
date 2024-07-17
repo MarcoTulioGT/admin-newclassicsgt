@@ -248,8 +248,11 @@ export async function fetchFilteredPurchases ( query: string,
       purchases.create_date,
       purchases.updated_date
       FROM purchases
+      JOIN boxes
+      on purchases.box_id = boxes.id
       WHERE
-      purchases.name ILIKE ${`%${query}%`} OR
+      boxes.box_id::TEXT ILIKE ${`%${query}%`} OR
+      purchases.noitem::TEXT ILIKE ${`%${query}%`} OR
       purchases.create_date::text ILIKE ${`%${query}%`} 
       ORDER BY purchases.name asc
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
@@ -347,7 +350,7 @@ export async function fetchPurchaseById(id: string) {
       purchases.name,
         purchases.noitem,     
         purchases.qty,
-        purchases.price,
+        purchases.cost,
         purchases.investment_dollar,
         purchases.images,
         purchases.box_id,
@@ -368,6 +371,7 @@ export async function fetchPurchaseById(id: string) {
 }
 
 export async function fetchBoxes() {
+  noStore();
   try {
     const data = await sql<BoxField>`
       SELECT
@@ -375,7 +379,7 @@ export async function fetchBoxes() {
         box_id,
         status
       FROM boxes
-      ORDER BY box_id ASC
+      ORDER BY boxes.delivery_date desc
     `;
 
     const status = data.rows;
@@ -403,6 +407,7 @@ export async function fetchOrdeno() {
 }
 
 export async function fetchCategories() {
+  noStore();
   try {
     const data = await sql<CategoriesField>`
     SELECT  null as id, 'New' AS name
@@ -471,7 +476,7 @@ export async function fetchPurchasesPages(query: string){
   noStore();
   try {
     const count = await sql`SELECT COUNT(*)
-    FROM purchases
+    FROM purchases 
     WHERE
     purchases.name ILIKE ${`%${query}%`} OR
     purchases.noitem ILIKE ${`%${query}%`} OR
