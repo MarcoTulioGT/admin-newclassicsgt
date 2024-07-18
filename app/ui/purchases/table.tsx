@@ -156,7 +156,7 @@ export default async function PurchasesTable({
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {formatPercent(purchase.mu)}
                   </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                  <td className="whitespace-nowrap  px-3 py-1 font-medium text-blue-600 hover:border hover:border-blue-300">
                    {formatCurrencyGT(purchase.pricesaleuq)}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
