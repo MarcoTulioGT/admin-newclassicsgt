@@ -31,26 +31,27 @@ const FormSchemaCategory = z.object({
 });
 
 
-  const FormSchemaPurchase =z.object({
-  id: z.string(),
-  noitem: z.string(),
-  box_id: z.string(),
-  name: z.string(),
-  qty: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
-  investment_dollar: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
-  cost: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
-  costotal: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
-  costshipUS: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
-  costShippingGT: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
-  costtotalshippingU: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
-  costtotalbypurchase: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
-  costsaleuq: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
-  mu: z.coerce.number().gt(-100, { message: 'Please enter a mu greater or equal 0.' }),
-  pricesaleuq: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
-  utility: z.coerce.number().gt(-100, { message: 'Please enter a utility greater or equal 0.' }),
-  totalutilitybyp: z.coerce.number().gt(-1000, { message: 'Please enter a totalutilitybyp greater or equal 0.' }),
-  images: z.string(),
-  });
+const FormSchemaPurchase =z.object({
+id: z.string(),
+noitem: z.string(),
+box_id: z.string(),
+name: z.string(),
+category:  z.string(),
+qty: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
+investment_dollar: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+cost: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+costotal: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+costshipUS: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+costShippingGT: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+costtotalshippingU: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+costtotalbypurchase: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+costsaleuq: z.coerce.number().gt(0, { message: 'Please enter a cost greater than $0.' }),
+mu: z.coerce.number().gt(-100, { message: 'Please enter a mu greater or equal 0.' }),
+pricesaleuq: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
+utility: z.coerce.number().gt(-100, { message: 'Please enter a utility greater or equal 0.' }),
+totalutilitybyp: z.coerce.number().gt(-1000, { message: 'Please enter a totalutilitybyp greater or equal 0.' }),
+images: z.string(),
+});
 
 
 const CreateBox = FormSchema.omit({ id: true, box_id: true  });
@@ -60,9 +61,7 @@ const CreateCategory = FormSchemaCategory.omit({ id: true });
 const UpdateCategory = FormSchemaCategory.omit({ id: true, parentid: true});
 
 const CreatePurchase = FormSchemaPurchase.omit({ id: true });
-const UpdatePurchase = FormSchemaPurchase.omit({ id: true, cost: true, costotal: true, costshipUS: true, costShippingGT: true, 
-  costtotalshippingU: true, costtotalbypurchase: true, costsaleuq: true, mu: true, pricesaleuq: true, utility: true,
-  totalutilitybyp: true, images: true});
+const UpdatePurchase = FormSchemaPurchase.omit({ id: true, images: true});
 
 
 
@@ -203,15 +202,28 @@ export async function updateCategory(id: string, prevState: State, formData: For
 export async function updatePurchase(id: string, prevState: State, formData: FormData) {
 
 
-  const validatedFields = UpdatePurchase.safeParse({
-  noitem: formData.get('noitem'),
-  box_id: formData.get('box_id'),
-  name: formData.get('name'),
-  qty: formData.get('qty'),
-  investment_dollar: formData.get('investment_dollar'),
- });
+ console.log(formData)
+ // Validate form using Zod
+   const validatedFields = UpdatePurchase.safeParse({
+   noitem: formData.get("noitem"),
+   box_id: formData.get("box_id"),
+   name: formData.get('name'),
+   category: formData.get('category'),
+   qty: formData.get('qty'),
+   investment_dollar: formData.get('investment_dollar'),
+   cost: formData.get('cost'),
+   costotal: formData.get('costotal'),
+   costshipUS: formData.get('costshipUS'),
+   costShippingGT: formData.get('costShippingGT'),
+   costtotalshippingU: formData.get('costtotalshippingU'),
+   costtotalbypurchase: formData.get('costtotalbypurchase'),
+   costsaleuq: formData.get('costsaleuq'),
+   mu: formData.get('mu'),
+   pricesaleuq: formData.get('pricesaleuq'),
+   utility: formData.get('utility'),
+   totalutilitybyp: formData.get('totalutilitybyp'),
+  });
 
- 
  if (!validatedFields.success) {
    return {
      errors: validatedFields.error.flatten().fieldErrors,
@@ -219,7 +231,8 @@ export async function updatePurchase(id: string, prevState: State, formData: For
    };
  }
  
-   const { noitem, box_id, name, qty, investment_dollar } = validatedFields.data;
+   const { noitem, box_id, name, category, qty, investment_dollar, cost, costotal, costshipUS, costShippingGT,
+            costtotalshippingU, costtotalbypurchase, costsaleuq, mu, pricesaleuq, utility, totalutilitybyp  } = validatedFields.data;
 
  
    try {
@@ -229,8 +242,19 @@ export async function updatePurchase(id: string, prevState: State, formData: For
      noitem = ${noitem},
      box_id = ${box_id}, 
      name = ${name}, 
+     category= ${category},
      qty = ${qty}, 
-     investment_dollar= ${investment_dollar}, 
+     investment_dollar= ${floatToNumber(investment_dollar)},
+     cost= ${floatToNumber(cost)}, 
+     costotal= ${floatToNumber(costotal)}, 
+     costshipUS = ${floatToNumber(costshipUS)},
+     costShippingGT = ${floatToNumber(costShippingGT)},
+     costtotalbypurchase = ${floatToNumber(costtotalbypurchase)},
+     costsaleuq = ${floatToNumber(costsaleuq)},
+     mu = ${mu},
+     pricesaleuq = ${floatToNumber(pricesaleuq)},
+     utility = ${floatToNumber(utility)},
+     totalutilitybyp =  ${floatToNumber(totalutilitybyp)},
      updated_date = current_date
      WHERE id = ${id}
    `;
@@ -328,6 +352,7 @@ export async function createPurchase(prevState: State, formData: FormData) {
     noitem: formData.get("noitem"),
     box_id: formData.get("box_id"),
     name: formData.get('name'),
+    category: formData.get('category'),
     qty: formData.get('qty'),
     investment_dollar: formData.get('investment_dollar'),
     cost: formData.get('cost'),
@@ -342,7 +367,6 @@ export async function createPurchase(prevState: State, formData: FormData) {
     utility: formData.get('utility'),
     totalutilitybyp: formData.get('totalutilitybyp'),
     images: formData.get('image1')
-
     });
 
     // If form validation fails, return errors early. Otherwise, continue.
@@ -354,16 +378,16 @@ export async function createPurchase(prevState: State, formData: FormData) {
   }
     
      // Prepare data for insertion into the database
-    const { noitem, box_id, name, qty, investment_dollar, cost, costotal, costshipUS, costShippingGT, 
+    const { noitem, box_id, name, category, qty, investment_dollar, cost, costotal, costshipUS, costShippingGT, 
             costtotalshippingU, costtotalbypurchase, costsaleuq, mu, pricesaleuq, utility, totalutilitybyp, images} = validatedFields.data;
     console.log(cost)
     try {
     await sql`
-    INSERT INTO purchases (noitem, box_id, name, qty, investment_dollar, cost, costotal, costshipUS, costShippingGT, 
+    INSERT INTO purchases (noitem, box_id, name, category, qty, investment_dollar, cost, costotal, costshipUS, costShippingGT, 
       costtotalshippingU, costtotalbypurchase, costsaleuq, mu, pricesaleuq, utility, totalutilitybyp, images)
-    VALUES (${noitem}, ${box_id}, ${name}, ${qty}, ${floatToNumber(investment_dollar)}, ${floatToNumber(cost)}, ${floatToNumber(costotal)},
+    VALUES (${noitem}, ${box_id}, ${name}, ${category}, ${qty}, ${floatToNumber(investment_dollar)}, ${floatToNumber(cost)}, ${floatToNumber(costotal)},
             ${floatToNumber(costshipUS)}, ${floatToNumber(costShippingGT)}, ${floatToNumber(costtotalshippingU)}, 
-            ${floatToNumber(costtotalbypurchase)}, ${floatToNumber(costsaleuq)}, ${mu}, ${pricesaleuq}, ${floatToNumber(utility)},
+            ${floatToNumber(costtotalbypurchase)}, ${floatToNumber(costsaleuq)}, ${mu}, ${floatToNumber(pricesaleuq)}, ${floatToNumber(utility)},
              ${floatToNumber(totalutilitybyp)},
             ARRAY [${images}])
     ON CONFLICT (id) DO NOTHING

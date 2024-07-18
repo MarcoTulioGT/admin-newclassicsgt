@@ -83,8 +83,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
               <input
                 id="noitem"
                 name="noitem"
-                type="text"
-                
+                type="text"                
                 placeholder="Enter order number"
                 className="peer block w-full rounded-md border bg-sky-100 hover:bg-yellow-50 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
                 aria-describedby="noitem-error"
@@ -111,9 +110,8 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
             <select
               id="box"
               name="box_id"
-              className="peer block w-full cursor-pointer rounded-md border  bg-sky-100 hover:bg-yellow-50 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
-
-            >
+              className="peer block w-full cursor-pointer rounded-md border  bg-sky-100 hover:bg-yellow-50 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"            
+              >
               <option value="" disabled>
                 Select a box
               </option>
@@ -142,7 +140,6 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
                 id="name"
                 name="name"
                 type="text"
-
                 placeholder="Enter name"
                 className="peer block w-full rounded-md border bg-sky-100 hover:bg-yellow-50 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
                 aria-describedby="name-error"
@@ -160,18 +157,18 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
           </div>
         </div>
 
-                {/* Parentid Name */}
+                {/* Category Name */}
                 <div className="mb-4">
-          <label htmlFor="parentid" className="mb-2 block text-xs font-medium">
+          <label htmlFor="category" className="mb-2 block text-xs font-medium">
             Choose parent category
           </label>
           <div className="relative">
             <select
-              id="parentid"
-              name="parentid"
+              id="category"
+              name="category"
               className="peer block w-full cursor-pointer rounded-md border  bg-sky-100 hover:bg-yellow-50 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
               defaultValue=""
-              aria-describedby="parentid-error"
+              aria-describedby="category-error"
             >
               <option value="" disabled>
                 Select a categories
@@ -184,9 +181,9 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
             </select>
             <TagIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
-          <div id="parentid-error" aria-live="polite" aria-atomic="true">
-        {state.errors?.parentid &&
-          state.errors.parentid.map((error: string) => (
+          <div id="category-error" aria-live="polite" aria-atomic="true">
+        {state.errors?.category &&
+          state.errors.category.map((error: string) => (
             <p className="mt-2 text-xs text-red-500" key={error}>
               {error}
             </p>
@@ -537,7 +534,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
                 type="text"
                 value={(Math.floor((((invValue/qtyValue)*DollarToQt(1))+(Number(costshipusValue)+Number(costshipgtValue)))/(1-(muValue/100)))).toFixed(2) }
                 //value={Math.floor(59.48/(1-(34/100)))}
-                className="peer block w-full rounded-md border border-gray-200  bg-gray-300 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border border-gray-200  bg-green-400 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
                 aria-describedby="pricesaleuq-error"
               />
               <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -567,10 +564,10 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
                 type="text"
 
                 value={(( (Math.floor((((invValue/qtyValue)*DollarToQt(1))+(Number(costshipusValue)+Number(costshipgtValue)))/(1-(muValue/100)))).toFixed(2) )  -   (((invValue/qtyValue)*DollarToQt(1))+(Number(costshipusValue)+Number(costshipgtValue))).toFixed(2) ).toFixed(2)  }
-                className="peer block w-full rounded-md border border-gray-200  bg-gray-300 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border border-gray-200  bg-gray-600 text-gray-100 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
                 aria-describedby="utility-error"
               />
-              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-100 peer-focus:text-gray-900" />
             </div>
             <div id="utility-error" aria-live="polite" aria-atomic="true">
         {state.errors?.utility&&

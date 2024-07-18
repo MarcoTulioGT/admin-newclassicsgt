@@ -55,6 +55,15 @@ export const DollarToQt = (
    return(quetzales.toFixed(2))
 };
 
+export const QtToDollar = (
+  GTQ: number,
+) => {
+   const dolares = GTQ/7.9;
+   console.log(dolares)
+   return(dolares.toFixed(2))
+};
+
+
 export const floatToNumber = (
   data: string,
 ) => {

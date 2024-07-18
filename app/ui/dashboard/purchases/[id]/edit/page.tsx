@@ -1,6 +1,6 @@
 import Form from '@/app/ui/purchases/edit-form';
 import Breadcrumbs from '@/app/ui/purchases/breadcrumbs';
-import { fetchPurchaseById, fetchBoxes } from '@/app/lib/data';
+import { fetchCategories, fetchPurchaseById, fetchBoxes } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
  
 export default async function Page({ params }: { params: { id: string } }) {
     const id = params.id;
-    const [purchase, boxes] = await Promise.all([fetchPurchaseById(id), fetchBoxes(),]);
+    const [categories, purchase, boxes] = await Promise.all([fetchCategories(),fetchPurchaseById(id), fetchBoxes(),]);
       if (!purchase) {
         notFound();
       }
@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           },
         ]}
       />
-      <Form purchase={purchase} boxes={boxes} />
+      <Form categories={categories}  purchase={purchase} boxes={boxes} />
     </main>
   );
 }

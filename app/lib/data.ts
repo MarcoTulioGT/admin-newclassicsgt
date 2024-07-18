@@ -348,10 +348,16 @@ export async function fetchPurchaseById(id: string) {
       SELECT
       purchases.id,
       purchases.name,
-        purchases.noitem,     
+        purchases.noitem,
+        purchases.category,     
         purchases.qty,
         purchases.cost,
         purchases.investment_dollar,
+        purchases.costshipus,
+        purchases.costshippinggt,
+        purchases.costtotalbypurchase,
+        purchases.mu,
+        purchases.pricesaleuq,
         purchases.images,
         purchases.box_id,
         purchases.create_date,
@@ -359,6 +365,7 @@ export async function fetchPurchaseById(id: string) {
       FROM purchases
       WHERE purchases.id = ${id};
     `;
+    
 
     const purchase = data.rows.map((purchase) => ({
       ...purchase,
