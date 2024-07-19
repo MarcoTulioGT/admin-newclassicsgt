@@ -63,7 +63,7 @@ export default async function BoxesTable({
                   Description
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
-                  Picture
+                  Logo
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
                   Created Date
