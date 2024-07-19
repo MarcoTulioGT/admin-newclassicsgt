@@ -79,9 +79,9 @@ export default function NavLinks() {
               {
                 'max-sm:hidden': link.mobile === false,
               },
-              'flex h-[30px] grow items-center justify-center gap-2 rounded-sm bg-slate-50 p-3 text-sm font-small text-gray-600 hover:bg-slate-100  hover:text-blue-600 hover:outline outline-1 outline-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
+              'flex h-[30px] grow items-center justify-center gap-2 rounded-sm bg-slate-50 p-3 text-sm font-small text-gray-600 hover:bg-slate-100  hover:text-blue-600 hover:outline outline-1 outline-blue-300 md:flex-none md:justify-start md:p-2 md:px-3',
               {
-                'bg-slate-50 outline outline-1 text-blue-500': pathname === link.href,
+                'bg-slate-50 outline outline-1 outline-blue-300 text-blue-600': pathname === link.href,
               },
             )}
             >

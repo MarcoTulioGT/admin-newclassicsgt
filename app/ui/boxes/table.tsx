@@ -3,6 +3,7 @@ import { UpdateBox, DeleteBox } from '@/app/ui/boxes/buttons';
 import BoxStatus from '@/app/ui/boxes/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredBoxes } from '@/app/lib/data';
+import CardWrapper from '@/app/ui/boxes/cards';
 
 export default async function BoxesTable({
   query,
