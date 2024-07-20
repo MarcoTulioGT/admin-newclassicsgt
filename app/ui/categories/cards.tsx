@@ -33,10 +33,10 @@ import {
   
          <Card title="Count categories" value={numberOfCategories} type="count" />
         <Card title="Count root categories" value={numberOfRootCategories} type="countroot" />
-        <div className="rounded-xl outline outline-1 outline-blue-300"style={{height: '170px' }}>
+        <div className="rounded-xl outline outline-1 outline-blue-300 h-44">
            <CategoryBoxChart/>
         </div>
-        <div className=" pl-16 "style={{  height: '170px' }}>
+        <div className=" rounded-xl pl-16 bg-blue-50 h-44">
            <CategoryChart/>
         </div>
       </>

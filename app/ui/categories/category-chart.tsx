@@ -11,12 +11,8 @@ export const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: false,
+        position: true,
       },
-      title: {
-        display: true,
-        text: 'Chart.js Doughnut Chart'
-      }
     }
   };
 
@@ -32,7 +28,7 @@ export default async function CategoryChart() {
         let d2 = r2.max - r2.min         
         const G = Math.round(r1.min + Math.random() * d1)
         const B = Math.round(r2.min + Math.random() * d2)
-        bgColor.push('rgba(1, '+G+', '+B+', 0.50)');
+        bgColor.push('rgba(1, '+G+', '+B+', 0.65)');
     }
 
 

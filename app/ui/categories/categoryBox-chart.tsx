@@ -27,7 +27,7 @@ export default async function CategoryBoxChart() {
     labels,
     datasets: [
       {
-        label: 'Category count/month',
+        label: 'Categories by month',
         data: count,
         borderColor:'rgba(0, 18, 247, 0.91)',
         pointStyle: 'circle',
