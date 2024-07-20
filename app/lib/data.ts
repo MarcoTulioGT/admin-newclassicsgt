@@ -12,6 +12,7 @@ import {
   LatestBoxRaw,
   User,
   Cost,
+  PurchaseByCategory,
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
@@ -40,6 +41,58 @@ export async function fetchCost() {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch cost data.');
+  }
+}
+
+export async function fetchCountCategory(){
+    // Add noStore() here to prevent the response from being cached.
+  // This is equivalent to in fetch(..., {cache: 'no-store'}).
+  noStore();
+  try {
+    // Artificially delay a response for demo purposes.
+    // Don't do this in production :)
+
+    console.log('Fetching count category data...');
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const data = await sql<Cost>`select *
+    from(
+    select count(*) count, TO_CHAR(create_date, 'Monthyyyy') AS month,  create_date
+    from categories
+    where  create_date >= CURRENT_DATE-360
+    group by TO_CHAR(create_date, 'Monthyyyy') , create_date
+    )
+    order by create_date  asc `;
+ 
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch count category  data.');
+  }
+}
+
+export async function fetchCategoriesbyPurchase(){
+  // Add noStore() here to prevent the response from being cached.
+  // This is equivalent to in fetch(..., {cache: 'no-store'}).
+  noStore();
+  try {
+    // Artificially delay a response for demo purposes.
+    // Don't do this in production :)
+
+    console.log('Fetching Categories by Purchase data...');
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const data = await sql<PurchaseByCategory>`select sum(1) count, C.name
+    from categories C
+    join purchases P
+    on C.id = P.category
+    group by C.name
+`;
+ 
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch Categories by Purchase data.');
   }
 }
 
@@ -102,6 +155,42 @@ export async function fetchCardData() {
   }
 }
 
+export async function fetchCardCategory (){
+  noStore();
+  try {
+    // You can probably combine these into a single SQL query
+    // However, we are intentionally splitting them to demonstrate
+    // how to initialize multiple queries in parallel with JS.
+    const categoryCountPromise = sql`SELECT COUNT(*) FROM categories`;
+    const categoryRootCountPromise = sql`SELECT COUNT(*) FROM categories where parentid = '0'`;
+    const BoxStatusPromise = sql`
+    SELECT  SUM(CASE WHEN status = 'delivered' THEN cost ELSE 0 END) AS "paid",
+             SUM(CASE WHEN status != 'delivered' THEN cost ELSE 0 END) AS "pending"
+    FROM boxes`;
+
+    const data = await Promise.all([
+      categoryCountPromise,
+      categoryRootCountPromise,
+      BoxStatusPromise,
+    ]);
+
+    const numberOfCategories = Number(data[0].rows[0].count ?? '0');
+    const numberOfRootCategories = Number(data[1].rows[0].count ?? '0');
+    const totalPaidCost = formatCurrency(data[2].rows[0].paid ?? '0');
+    const totalPendingCost = formatCurrency(data[2].rows[0].pending ?? '0');
+
+    return {
+      numberOfRootCategories,
+      numberOfCategories,
+      totalPaidCost,
+      totalPendingCost,
+    };
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch card data.');
+  }
+
+}
 
 const ITEMS_PER_PAGE = 10;
 export async function fetchFilteredBoxes(
@@ -285,7 +374,6 @@ export async function fetchBoxesPages(query: string) {
     throw new Error('Failed to fetch total number of boxes.');
   }
 }
-
 
 export async function fetchBoxById(id: string) {
   noStore();

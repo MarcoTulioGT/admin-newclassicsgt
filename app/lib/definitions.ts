@@ -23,6 +23,11 @@ export type User = {
     month: string;
     cost: number;
   };
+
+  export type = PurchaseByCategory{
+    count: number;
+    name: string;
+  }
   
   export type LatestBox = {
     id: string;

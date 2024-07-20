@@ -6,8 +6,8 @@ import { rajdhani } from '@/app/ui/fonts';
 import { fetchCategoriesPages } from '@/app/lib/data';
 import { CardsSkeleton, CostChartSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
-import CardWrapper  from '@/app/ui/boxes/cards';
-import BoxChart from '@/app/ui/boxes/box-chart';
+import CardWrapper  from '@/app/ui/categories/cards';
+import BoxChart from '@/app/ui/categories/box-chart';
 
 export default async function Page({
   searchParams,
