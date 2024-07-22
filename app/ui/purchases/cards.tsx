@@ -8,9 +8,12 @@ import {
   } from '@heroicons/react/24/outline';
   import { Suspense } from 'react';
   import { lusitana, rajdhani } from '@/app/ui/fonts';
-  import { fetchCardData } from '@/app/lib/data';
+  import { fetchCardPurchase } from '@/app/lib/data';
   import { CostChartSkeleton } from '@/app/ui/skeletons';
-  import BoxChart from '@/app/ui/boxes/box-chart';
+  import CategoryUtility from '@/app/ui/purchases/categoryUtility-chart';
+  import CategoryBoxChart from '@/app/ui/categories/categoryBox-chart';
+  import {formatCurrency, formatCurrencyGT} from '@/app/lib/utils';
+  import BoxChart from '@/app/ui/purchases/box-chart';
 
   const iconMap = {
     paid: BanknotesIcon,
@@ -19,32 +22,41 @@ import {
     boxes: ArchiveBoxIcon,
   };
   
-  export default async function CardWrapper() {
+  export default async function CardWrapper({
+    query
+  }: {
+    query: string;
+  }) {
+
+  console.log(query)
+
+
     const {
-      numberOfBoxes,
-      numberOfBoxesDelivered,
-      totalPaidCost,
-      totalPendingCost,
-    } = await fetchCardData();
+        suminvestment,
+        sumutility,
+        qty,
+        totalPendingCost,
+      } = await fetchCardPurchase(query);
   
+
     return (
       <>
         {/* NOTE: comment in this code when you get to this point in the course */}
   
-         <Card title="Count boxes by year" value={numberOfBoxes} type="count" />
-        <Card title="Paid boxes by year" value={totalPaidCost} type="cost" />
-        <Card
-          title="Total boxes delivered by year"
-          value={numberOfBoxesDelivered}
-          type="delivered"
-        /> 
-        <div className=" outline outline-1 rounded-xl bg-white text-blue-300 h-44">
+         <Card title="Count Investment" value={formatCurrencyGT(suminvestment)} type="countInvs" />
+        <Card title="Count Utility" value={formatCurrencyGT(sumutility)} type="countUtility" />
+        <Card title="Qty" value={qty} type="qty" />
+        <div className="rounded-xl outline outline-1 outline-blue-300 h-44">
            <BoxChart/>
+        </div>
+        <div className=" rounded-xl pl-16 bg-blue-50 h-44">
+           <CategoryUtility/>
         </div>
       </>
     );
   }
-  
+
+
   export function Card({
     title,
     value,
@@ -52,7 +64,7 @@ import {
   }: {
     title: string;
     value: number | string;
-    type: 'count' | 'cost' | 'delivered' ;
+    type: 'countInvs' | 'countUtility' | 'qty' ;
   }) {
     const Icon = iconMap[type];
   

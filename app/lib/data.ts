@@ -13,6 +13,7 @@ import {
   User,
   Cost,
   PurchaseByCategory,
+  DataPurchase,
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
@@ -37,6 +38,40 @@ export async function fetchCost() {
     )
     order by delivery_date  asc `;
  
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch cost data.');
+  }
+}
+
+
+export async function fetchBoxPurchase() {
+  // Add noStore() here to prevent the response from being cached.
+  // This is equivalent to in fetch(..., {cache: 'no-store'}).
+  noStore();
+  try {
+    // Artificially delay a response for demo purposes.
+    // Don't do this in production :)
+
+    console.log('Fetching cost data...');
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const data = await sql<DataPurchase>`select *
+    from(
+    select sum(b.cost) cost, 
+   TO_CHAR(b.delivery_date, 'mm-yyyy') AS month,  
+   delivery_date,
+   (select sum(investment_dollar) AS invest from purchases where box_id = b.id) AS invest, 
+   (select sum(totalutilitybyp) AS invest from purchases where box_id = b.id) AS utility, 
+    id
+    from boxes b
+    where  b.delivery_date >= CURRENT_DATE-360
+    group by  delivery_date, id
+    )
+    order by delivery_date  asc ;`;
+    
+    console.log(data.rows)
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
@@ -88,11 +123,34 @@ export async function fetchCategoriesbyPurchase(){
     on C.id = P.category
     group by C.name
 `;
- 
-    return data.rows;
+ return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch Categories by Purchase data.');
+  }
+}
+
+export async function fetchCategoriesbyUtility(){
+  // Add noStore() here to prevent the response from being cached.
+  // This is equivalent to in fetch(..., {cache: 'no-store'}).
+  noStore();
+  try {
+    // Artificially delay a response for demo purposes.
+    // Don't do this in production :)
+
+    console.log('Fetching fetchCategoriesbyPurchase data...');
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const data = await sql<PurchaseByCategory>`select sum(totalutilitybyp) count, C.name
+    from categories C
+    join purchases P
+    on C.id = P.category
+    group by C.name
+`;
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch fetchCategoriesbyPurchase data.');
   }
 }
 
@@ -191,6 +249,60 @@ export async function fetchCardCategory (){
   }
 
 }
+
+
+  export async function fetchCardPurchase (
+    query: string,
+  ){
+    noStore();
+    try {
+      var SumInvest = ''
+      var SumUtility = ''
+      var QtyPurchase = ''
+console.log(query.length)
+ if(query.length > 0){
+  console.log('entro')
+      SumInvest = sql`select sum(costotal) from purchases where box_id = (select id from boxes where box_id = ${`${query}`})`
+      SumUtility = sql`select sum(totalutilitybyp) from purchases where box_id = (select id from boxes where box_id = ${`${query}`})`
+      QtyPurchase = sql`select sum(qty) from purchases where box_id = (select id from boxes where box_id = ${`${query}`})`
+      }else{
+        console.log('no entro')
+         SumInvest = sql`select sum(costotal) from purchases`
+         SumUtility = sql`select sum(totalutilitybyp) from purchases`
+         QtyPurchase = sql`select sum(qty) from purchases`
+      }
+
+
+
+      const BoxStatusPromise = sql`
+      SELECT  SUM(CASE WHEN status = 'delivered' THEN cost ELSE 0 END) AS "paid",
+               SUM(CASE WHEN status != 'delivered' THEN cost ELSE 0 END) AS "pending"
+      FROM boxes`;
+
+      const data = await Promise.all([
+        SumInvest,
+        SumUtility,
+        QtyPurchase,
+      ]);
+   
+
+      const suminvestment = Number(data[0].rows[0].sum ?? '0');
+      const sumutility = Number(data[1].rows[0].sum ?? '0');
+      const qty = Number(data[2].rows[0].sum ?? '0');
+      //const totalPendingCost = Number(data[2].rows[0].pending ?? '0');
+  
+      return {
+        sumutility,
+        suminvestment,
+        qty,
+        
+      };
+    } catch (error) {
+      console.log(error);
+
+    }
+  
+  }
 
 const ITEMS_PER_PAGE = 10;
 export async function fetchFilteredBoxes(
@@ -573,11 +685,12 @@ export async function fetchPurchasesPages(query: string){
     const count = await sql`SELECT COUNT(*)
     FROM purchases 
     WHERE
+    purchases.box_id = (select id from boxes where box_id = ${`${query}`} )  OR
     purchases.name ILIKE ${`%${query}%`} OR
     purchases.noitem ILIKE ${`%${query}%`} OR
     purchases.create_date::text ILIKE ${`%${query}%`}
   `;
-
+ console.log(count)
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
     return totalPages;

@@ -13,7 +13,7 @@ export default async function PurchasesTable({
 }) {
   const purchases = await fetchFilteredPurchases(query, currentPage);
   return (
-    <div className="mt-6 flow-root">
+    <div className="mt-1 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="md:hidden">
@@ -77,7 +77,7 @@ export default async function PurchasesTable({
                   Cost Total Shipping U. G
                 </th>
                 <th scope="col" className="px-3 py-2 font-normal">
-                  Cost Total By Purchase
+                Cost Total shipping GT by purchase $
                 </th>
                 <th scope="col" className="px-3 py-2 font-normal">
                   Cost Sale U. Q
@@ -148,7 +148,7 @@ export default async function PurchasesTable({
                    {formatCurrencyGT(purchase.costtotalshippingu)}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {formatCurrencyGT(purchase.costtotalbypurchase)}
+                   {formatCurrency(purchase.costtotalbypurchase)}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {formatCurrencyGT(purchase.costsaleuq)}

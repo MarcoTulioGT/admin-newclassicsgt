@@ -24,6 +24,13 @@ export type User = {
     cost: number;
   };
 
+
+  export type DataPurchase = {
+    month: string;
+    cost: number;
+    invest: number;
+    utility: number;
+  }
   export type = PurchaseByCategory{
     count: number;
     name: string;
