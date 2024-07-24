@@ -11,7 +11,7 @@ import {
   TruckIcon,
   TableCellsIcon,
   UsersIcon,
-  AdjustmentsHorizontalIcon
+  AdjustmentsHorizontalIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -34,12 +34,6 @@ const links = [
     mobile: false,
   },
   {
-    name: 'Products',
-    href: '/ui/dashboard/products',
-    icon: RectangleGroupIcon,
-    mobile: false,
-  },
-  {
     name: 'Sales',
     href: '/ui/dashboard/sales',
     icon: TableCellsIcon,
@@ -49,6 +43,18 @@ const links = [
     name: 'Shipping',
     href: '/ui/dashboard/shippings',
     icon: TruckIcon,
+    mobile: true,
+  },
+  {
+    name: 'Products',
+    href: '/ui/dashboard/products',
+    icon: RectangleGroupIcon,
+    mobile: false,
+  },
+  {
+    name: 'Clients',
+    href: '/ui/dashboard/settings',
+    icon: UserGroupIcon,
     mobile: true,
   },
   {

@@ -303,6 +303,18 @@ export async function deletePurchase(id: string) {
   }
 }
 
+export async function deleteSale(id: string) {
+  //throw new Error('Failed to Delete Box');
+
+  try{
+  await sql`DELETE FROM sales WHERE id = ${id}`;
+  revalidatePath('/ui/dashboard/sales');
+  return { message: 'Deleted Sale'};
+  }catch (error){
+    return { message: 'Database Error: Failed to Delete Sale.'};
+  }
+}
+
 export async function createCategory(prevState: State, formData: FormData) {
 
     // Validate form using Zod

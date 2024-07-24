@@ -148,3 +148,52 @@ CREATE TABLE IF NOT EXISTS boxes (
         ARRAY ['https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_1.jpg','https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_2.jpg','https://storage.googleapis.com/xfamily-xmanager/products/BWKCM5Z65_3.jpg'],
         'box_08062024')
         ON CONFLICT (id) DO NOTHING;
+
+
+
+
+
+        CREATE TABLE IF NOT EXISTS clients (
+            id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+            name VARCHAR(100) NOT NULL,
+            address VARCHAR(250)  NOT NULL,
+            city VARCHAR(250)  NOT NULL,
+            zone INT NOT NULL,
+            phone INT NOT NULL,
+            create_date DATE NOT NULL default CURRENT_DATE ,
+            updated_date DATE NOT NULL default CURRENT_DATE );
+
+
+        CREATE TABLE IF NOT EXISTS shippings (
+            id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+            client_id UUID NOT NULL,
+            shipping_cost INT NOT NULL,
+            status VARCHAR(50) NOT NULL,
+            create_date DATE NOT NULL default CURRENT_DATE ,
+            updated_date DATE NOT NULL default CURRENT_DATE );
+
+
+        CREATE TABLE IF NOT EXISTS sales (
+                id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+                id_shipping UUID NOT NULL,
+                noitem VARCHAR(100) NOT NULL,
+                qty INT NOT NULL,
+                price INT NOT NULL,
+                discount INT NOT NULL,
+                total INT NOT NULL,
+                create_date DATE NOT NULL default CURRENT_DATE ,
+                updated_date DATE NOT NULL default CURRENT_DATE );
+
+
+
+                INSERT INTO clients(name,address,city,zone,phone)
+                VALUES('Marco Catalán', '7 calle 11-48 granjas san cristobal zona 8 mixco','Guatemala/Mixco',8,32275569)
+                ON CONFLICT (id) DO NOTHING;
+
+                INSERT INTO shippings(client_id,shipping_cost,status)
+                VALUES('f63eb040-9f29-4b81-84cf-84da682a7e69',2500,'delivered')
+                ON CONFLICT (id) DO NOTHING;
+
+                INSERT INTO sales(id_shipping,noitem,qty,price,discount,total)
+                VALUES('662d2ad6-60f2-4b23-9d17-c90329d4530d','JD31124',8,125,0,1000)
+                ON CONFLICT (id) DO NOTHING;

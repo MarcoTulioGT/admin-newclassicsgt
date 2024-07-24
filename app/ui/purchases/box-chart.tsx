@@ -43,7 +43,7 @@ export default async function BoxChart() {
         pointRadius: 6,
         pointHoverRadius: 15,
         borderWidth: 1,
-        borderColor:'rgba(255, 0, 0, 1)',
+        borderColor:'rgba(189, 0, 0, 1)',
         backgroundColor: 'rgba(242, 2, 2, 0.6)',
       },
       {
@@ -53,7 +53,7 @@ export default async function BoxChart() {
         pointRadius: 6,
         pointHoverRadius: 15,
         borderWidth: 1,
-        borderColor:'rgba(0, 194, 255, 1)',
+        borderColor:'rgba(0, 145, 193, 1)',
         backgroundColor: 'rgba(0, 194, 255, 0.6)',
       },
       {
@@ -63,7 +63,7 @@ export default async function BoxChart() {
         pointRadius: 6,
         pointHoverRadius: 15,
         borderWidth: 1,
-        borderColor:'rgba(28, 205, 0, 1)',
+        borderColor:'rgba(10, 184, 0, 1)',
         backgroundColor: 'rgba(12, 223, 0, 0.6)',
       }
     ],

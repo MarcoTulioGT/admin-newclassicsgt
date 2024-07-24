@@ -9,6 +9,7 @@ import {
   CategoriesTable,
   ProductsTable,
   PurchasesTable,
+  SalesTable,
   LatestBoxRaw,
   User,
   Cost,
@@ -372,6 +373,42 @@ export async function fetchFilteredCategories(
   }
 }
 
+export async function fetchFilteredSales(
+  query: string,
+  currentPage: number,
+ ) {
+  noStore();
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  try {
+    const sales = await sql<SalesTable>`
+    select 
+    S.id, 
+    S.id_shipping, 
+    S.noitem, 
+    S.qty, 
+    S.price, 
+    S.discount, 
+    S.total, 
+    S.create_date, 
+    SH.status
+    from SALES S
+    join SHIPPINGS SH
+    on SH.id = S.id_shipping
+      WHERE
+      S.noitem ILIKE ${`%${query}%`} OR
+      SH.status ILIKE ${`%${query}%`} OR
+      S.create_date::text ILIKE ${`%${query}%`} 
+      ORDER BY S.create_date asc
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `;
+
+    return sales.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch sales.');
+  }
+}
+
 export async function fetchFilteredProducts( 
   query: string,
   currentPage: number,
@@ -701,3 +738,25 @@ export async function fetchPurchasesPages(query: string){
 }
 
 
+export async function fetchSalesPages(query: string){
+  noStore();
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM SALES S
+    join SHIPPINGS SH
+    on SH.id = S.id_shipping
+    WHERE
+    S.id::text  ILIKE ${`%${query}%`} OR
+    SH.status ILIKE ${`%${query}%`} OR
+    S.noitem ILIKE ${`%${query}%`} OR
+    S.create_date::text ILIKE ${`%${query}%`}
+  `;
+ console.log(count)
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of sales.');
+  }
+}

@@ -105,6 +105,19 @@ export type User = {
     updated_date: string;
   }
 
+  export type SalesTable={
+    id: string;
+    id_shipping: string;
+    noitem: string;
+    qty: number;
+    price: number;
+    discount: number;
+    total: number;
+    status: string;
+    create_date: string;
+
+  }
+
   export type BoxField = {
     id: string;
     box_id: string;
