@@ -213,4 +213,4 @@ CREATE TABLE IF NOT EXISTS boxes (
 
 
             insert into departaments(departamento, municipio)
-            values('Escuintla', '{"Municipio":"Escuintla", "zonas":[1,2,3,4,5]}')
+            values('Escuintla', '[{"Municipio":"Escuintla", "zonas":[1,2,3,4,5]}, {"Municipio":"Palín", "zonas":[1]}]')

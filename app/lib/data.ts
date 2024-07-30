@@ -15,6 +15,7 @@ import {
   Cost,
   PurchaseByCategory,
   DataPurchase,
+  ProductsField,
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
@@ -665,11 +666,33 @@ export async function fetchBoxes() {
   }
 }
 
+export async function fetchProducts(){
+  noStore();
+  try {
+    const data = await sql<ProductsField>`
+    select 
+    purchases.noitem, 
+    purchases.name, 
+    purchases.images, 
+    (select  name from categories where id = purchases.category) category
+    from purchases 
+    ORDER BY category asc
+    `;
+
+    const status = data.rows;
+
+    return status;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch products.');
+  } 
+}
+
 export async function fetchDepartaments(){
   noStore();
   try {
     const data = await sql<BoxField>`
-    select departamento, municipio -> 'Municipio' municipio, municipio -> 'zonas' zonas
+    select *
     from departaments
       ORDER BY departaments.departamento desc
     `;

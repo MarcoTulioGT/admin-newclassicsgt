@@ -124,6 +124,13 @@ export type User = {
     status: string;
   };
   
+  export type ProductsField = {
+  noitem: string;
+  name: string;
+  images: string;
+  category: string;
+  };
+
   export type CategoryField = {
     id: string;
     name: string;
