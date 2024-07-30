@@ -53,6 +53,18 @@ totalutilitybyp: z.coerce.number().gt(-1000, { message: 'Please enter a totaluti
 images: z.string(),
 });
 
+const FormSchemaSale =z.object({
+  id: z.string(),
+  id_shipping: z.string(),
+  noitem: z.string(),
+  qty: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
+  price: z.coerce.number().gt(0, { message: 'Please enter a price greater than $0.' }),
+  discount: z.coerce.number().gt(-1, { message: 'Please enter a discount greater than $0.' }),
+  total: z.coerce.number().gt(0, { message: 'Please enter a total greater than $0.' }),
+  status: z.string(),
+  create_date: z.string(),
+});
+
 
 const CreateBox = FormSchema.omit({ id: true, box_id: true  });
 const UpdateBox = FormSchema.omit({ id: true, box_id: true });
@@ -63,7 +75,7 @@ const UpdateCategory = FormSchemaCategory.omit({ id: true, parentid: true});
 const CreatePurchase = FormSchemaPurchase.omit({ id: true });
 const UpdatePurchase = FormSchemaPurchase.omit({ id: true, images: true});
 
-
+const UpdateSale = FormSchemaSale.omit({id: true, id_shipping: true, noitem: true, create_date: true, status: true});
 
 
 export type State = {
@@ -265,6 +277,40 @@ export async function updatePurchase(id: string, prevState: State, formData: For
   
    revalidatePath('/ui/dashboard/purchases');
    redirect('/ui/dashboard/purchases');
+}
+
+export async function updateSale(id: string, prevState: State, formData: FormData) {
+
+  const validatedFields = UpdateSale.safeParse({
+    qty: formData.get('qty'),
+    price: formData.get('price'),
+    discount: formData.get('discount'),
+    total: formData.get('total'),
+ });
+
+ 
+ if (!validatedFields.success) {
+  console.log(validatedFields.error.flatten().fieldErrors)
+   return {
+     errors: validatedFields.error.flatten().fieldErrors,
+     message: 'Missing Fields. Failed to Update sales.',
+   };
+ }
+ 
+   const {  qty, price, discount, total } = validatedFields.data; 
+   try {
+   await sql`
+     UPDATE sales
+     SET qty = ${qty}, price = ${price*100}, discount = ${discount*100}, total =${total*100}, updated_date = current_date
+     WHERE id = ${id}
+   `;
+   }catch (error){
+    console.log(error)
+     return { message: 'Database Error: Failed to Update sales.'};
+   }
+  
+   revalidatePath('/ui/dashboard/sales');
+   redirect('/ui/dashboard/sales');
 }
 
 export async function deleteBox(id: string) {

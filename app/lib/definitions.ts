@@ -132,6 +132,14 @@ export type User = {
   export type OrdennoField = {
     ordenno: number;
   }
+
+
+  export type DepartamentField = {
+     departamento: string;
+     municipio: string;
+     zonas: string
+  }
+
   
   export type BoxForm = {
     id: string;
@@ -165,3 +173,18 @@ export type User = {
     create_date: string;
     updated_date: string;
   }
+
+
+  export type SaleForm={
+    id: string;
+    id_shipping: string;
+    noitem: string;
+    qty: number;
+    price: number;
+    discount: number;
+    total: number;
+    create_date: string;
+    updated_date: string;
+
+  }
+

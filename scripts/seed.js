@@ -190,10 +190,27 @@ CREATE TABLE IF NOT EXISTS boxes (
                 VALUES('Marco Catalán', '7 calle 11-48 granjas san cristobal zona 8 mixco','Guatemala/Mixco',8,32275569)
                 ON CONFLICT (id) DO NOTHING;
 
+                INSERT INTO sales(id_shipping,noitem,qty,price,discount,total)
+                VALUES('662d2ad6-60f2-4b23-9d17-c90329d4530d','JD31124',8,1250,0,1000)
+                ON CONFLICT (id) DO NOTHING;
+
                 INSERT INTO shippings(client_id,shipping_cost,status)
                 VALUES('f63eb040-9f29-4b81-84cf-84da682a7e69',2500,'delivered')
                 ON CONFLICT (id) DO NOTHING;
 
-                INSERT INTO sales(id_shipping,noitem,qty,price,discount,total)
-                VALUES('662d2ad6-60f2-4b23-9d17-c90329d4530d','JD31124',8,125,0,1000)
-                ON CONFLICT (id) DO NOTHING;
+
+                
+        CREATE TABLE IF NOT EXISTS departaments (
+            id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+            departamento VARCHAR(100) NOT NULL,
+            municipio json,
+            updated_date DATE NOT NULL default CURRENT_DATE );
+
+
+            insert into departaments(departamento, municipio)
+            values('Guatemala', '[{"Municipio":"Mixco", "zonas":[1,2,3,4,5,6,7,8,9,10,11]}, {"Municipio":"Guatemala", "zonas":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21,22,23,24,25]}, {"Municipio": "Villa Nueva", "zonas":[1,2,3,4,5,6,7,8,9,10,11,12]}]')
+
+
+
+            insert into departaments(departamento, municipio)
+            values('Escuintla', '{"Municipio":"Escuintla", "zonas":[1,2,3,4,5]}')

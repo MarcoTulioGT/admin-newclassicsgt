@@ -614,6 +614,36 @@ export async function fetchPurchaseById(id: string) {
   }
 }
 
+export async function fetchSaleById(id: string){
+  noStore();
+  try {
+    const data = await sql<CategoryForm>`
+      SELECT
+      sales.id,
+      sales.id_shipping,
+      sales.noitem,
+      sales.qty,
+      sales.price,
+      sales.discount,
+      sales.total,
+      sales.create_date,
+      sales.updated_date
+      FROM sales
+      WHERE sales.id = ${id};
+    `;
+    
+
+    const sale = data.rows.map((sale) => ({
+      ...sale,
+    }));
+    return sale[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch sales.');
+  }
+}
+
+
 export async function fetchBoxes() {
   noStore();
   try {
@@ -632,6 +662,24 @@ export async function fetchBoxes() {
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch all status.');
+  }
+}
+
+export async function fetchDepartaments(){
+  noStore();
+  try {
+    const data = await sql<BoxField>`
+    select departamento, municipio -> 'Municipio' municipio, municipio -> 'zonas' zonas
+    from departaments
+      ORDER BY departaments.departamento desc
+    `;
+
+    const deptos = data.rows;
+    
+    return deptos;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all departaments.');
   }
 }
 
