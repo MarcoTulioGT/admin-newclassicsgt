@@ -40,6 +40,12 @@ const links = [
     mobile: true,
   },
   {
+    name: 'Clients',
+    href: '/ui/dashboard/clients',
+    icon: UserGroupIcon,
+    mobile: true,
+  },
+  {
     name: 'Shipping',
     href: '/ui/dashboard/shippings',
     icon: TruckIcon,
@@ -50,12 +56,6 @@ const links = [
     href: '/ui/dashboard/products',
     icon: RectangleGroupIcon,
     mobile: false,
-  },
-  {
-    name: 'Clients',
-    href: '/ui/dashboard/settings',
-    icon: UserGroupIcon,
-    mobile: true,
   },
   {
     name: 'Settings',

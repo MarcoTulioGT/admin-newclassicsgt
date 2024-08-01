@@ -505,6 +505,72 @@ export async function fetchFilteredPurchases ( query: string,
   }
 
 }
+export async function fetchFilteredClient(query: string,
+  currentPage: number,
+  ) {
+   noStore();
+   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+   try {
+     const clients = await sql<PurchasesTable>`
+       SELECT
+       id,
+       name,
+       address,
+       depto,
+       city,
+       zone,
+       phone,
+       create_date
+       FROM clients
+       WHERE
+       clients.id::TEXT ILIKE ${`%${query}%`} OR
+       clients.name::TEXT ILIKE ${`%${query}%`} OR
+       clients.address::TEXT ILIKE ${`%${query}%`} OR
+       clients.depto::TEXT ILIKE ${`%${query}%`} OR
+       clients.city::TEXT ILIKE ${`%${query}%`} OR
+       clients.zone::TEXT ILIKE ${`%${query}%`} OR
+       clients.phone::text ILIKE ${`%${query}%`} 
+       ORDER BY clients.name asc
+       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+     `;
+ 
+     return clients.rows;
+   } catch (error) {
+     console.log(error)
+     console.error('Database Error:', error);
+     throw new Error('Failed to fetch clients.');
+   }
+}
+export async function fetchFilteredShippings(query: string,
+  currentPage: number,
+  ) {
+   noStore();
+   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+   try {
+     const shippings = await sql<PurchasesTable>`
+       SELECT
+       id,
+       client_id,
+       shipping_cost,
+       status,
+       create_date
+       FROM shippings
+       WHERE
+       shippings.id::TEXT ILIKE ${`%${query}%`} OR
+       shippings.client_id::TEXT ILIKE ${`%${query}%`} OR
+       shippings.status::TEXT ILIKE ${`%${query}%`} 
+       ORDER BY shippings.client_id asc
+       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+     `;
+ 
+     return shippings.rows;
+   } catch (error) {
+     console.log(error)
+     console.error('Database Error:', error);
+     throw new Error('Failed to fetch shippings.');
+   }
+}
+
 export async function fetchBoxesPages(query: string) {
   noStore();
   try {
@@ -674,7 +740,8 @@ export async function fetchProducts(){
     purchases.noitem, 
     purchases.name, 
     purchases.images, 
-    (select  name from categories where id = purchases.category) category
+    (select  name from categories where id = purchases.category) category,
+    purchases.pricesaleuq price
     from purchases 
     ORDER BY category asc
     `;
@@ -829,5 +896,24 @@ export async function fetchSalesPages(query: string){
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch total number of sales.');
+  }
+}
+
+export async function fetchClientPages(query: string){
+  noStore();
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM CLIENTS
+    WHERE
+    CLIENTS.id::text  ILIKE ${`%${query}%`} OR
+    CLIENTS.name::text ILIKE ${`%${query}%`} 
+  `;
+
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of clients.');
   }
 }

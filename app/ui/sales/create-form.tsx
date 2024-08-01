@@ -20,10 +20,10 @@ import {
   ReceiptPercentIcon
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
-import { createPurchase } from '@/app/lib/actions';
+import { createSale } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import { useState, useEffect } from 'react';
-import { formatDateToLocal, formatDateGT, DollarToQt, floatToNumber} from '@/app/lib/utils';
+import { formatDateToLocal, formatDateGT, DollarToQt, floatToNumber, formatCurrencyGT} from '@/app/lib/utils';
 
 
 export default function Form({ departamentos , products}: { departamentos: DepartamentField[] , products: ProductsField[] }) { 
@@ -32,16 +32,14 @@ export default function Form({ departamentos , products}: { departamentos: Depar
     return  element.departamento
    });
 
-   console.log(products)
-
   const initialState = { message: null, errors: {} };
-  const [state, dispatch] = useFormState(createPurchase, initialState);
+  const [state, dispatch] = useFormState(createSale, initialState);
   const [depto, setDepto] = useState('');
   const [muni, setMuni] = useState('');
   const [zona, setZona] = useState('');
   const [municipios, setMunicipios] = useState([]);
   const [zonas, setZonas] = useState([]);
-  const [qtyValue, setQty] = useState(0);
+  const [qtyValue, setQty] = useState(1);
   const [priceValue, setPrice] = useState(0);
   const [discountValue, setDiscount] = useState(0);
   const [product, setProduct] = useState('')
@@ -69,12 +67,15 @@ export default function Form({ departamentos , products}: { departamentos: Depar
   }
 
   const handleSelectChangeZone= e => {
-    console.log(e.target.value)
     setZona(e.target.value)
   }
 
   const handleSelectChangeProduct = e => {
     setProduct(e.target.value)
+    const findProduct = products.find((element) => {
+      return element.noitem === e.target.value
+    })
+    setPrice(findProduct.price)
   }
 
 
@@ -263,6 +264,7 @@ export default function Form({ departamentos , products}: { departamentos: Depar
                 name="shipcost"
                 type="number"
                 step="1"
+                defaultValue="0"
                 placeholder="Enter Shipping cost"
                 className="peer block w-full rounded-md border bg-sky-100 hover:bg-yellow-50 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
                 aria-describedby="shipcost-error"
@@ -299,7 +301,7 @@ export default function Form({ departamentos , products}: { departamentos: Depar
               {products.map((m) => (
 
                 <option key={m.noitem} value={m.noitem}>                  
-                  {m.category} - {m.noitem} - {m.name}   
+                  {m.category} - {m.noitem} - {m.name} - {formatCurrencyGT(m.price)}
                 </option>
               ))}
             </select>
@@ -354,10 +356,10 @@ export default function Form({ departamentos , products}: { departamentos: Depar
                 name="price"
                 type="number"
                 step="1"
-                value={priceValue}
+                value={priceValue/100}
                 onChange={handleInputChangePrice}
                 placeholder="Enter price"
-                className="peer block w-full rounded-md border bg-sky-100 hover:bg-yellow-50 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  bg-gray-300 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
                 aria-describedby="price-error"
               />
               <DocumentPlusIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -417,7 +419,7 @@ export default function Form({ departamentos , products}: { departamentos: Depar
                 id="total"
                 name="total"
                 type="number"
-                value={(Number(priceValue)*Number(qtyValue))- Number(discountValue)}
+                value={(Number(priceValue/100)*Number(qtyValue))- Number(discountValue)}
                 step="1"
                 onChange={handleInputChangeQty}
                 placeholder="Enter total"
@@ -455,13 +457,8 @@ export default function Form({ departamentos , products}: { departamentos: Depar
         <Button type="submit">Add Purchase</Button>
       </div>
     </form>
-    <div>
-      
+    <div>      
     </div>
-
-
     </div>
-
-
   );
 }

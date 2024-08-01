@@ -1,41 +1,42 @@
 import Image from 'next/image';
-import { UpdateSale, DeleteSale } from '@/app/ui/sales/buttons';
+import { UpdateSale, DeleteSale, CreateSale } from '@/app/ui/clients/buttons';
 import { formatDateToLocal, formatCurrency, formatCurrencyGT, formatPercent } from '@/app/lib/utils';
-import { fetchFilteredSales } from '@/app/lib/data';
+import { fetchFilteredClient } from '@/app/lib/data';
 
-export default async function SalesTable({
+export default async function ClientsTable({
   query,
   currentPage,
 }: {
   query: string;
   currentPage: number;
 }) {
-  const sales = await fetchFilteredSales(query, currentPage);
+  const clients = await fetchFilteredClient(query, currentPage);
+  console.log(clients)
   return (
     <div className="mt-1 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="md:hidden">
-            {sales?.map((sale) => (
+            {clients?.map((client) => (
               <div
-                key={sale.id}
+                key={client.id}
                 className="mb-2 w-full rounded-md bg-white p-4"
               >
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
-                    <p className="text-sm text-gray-500">{sale.noitem}</p>
+                    <p className="text-sm text-gray-500">{client.name}</p>
                   </div>
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
                     <p className="text-xl font-medium">
-                      {sale.noitem}
+                      {client.address}
                     </p>
-                    <p>{sale.status}</p>
+                    <p>{client.zone}</p>
                   </div>
                   <div className="flex justify-end gap-1">
-                    <UpdateSale id={sale.id} />
-                    <DeleteSale id={sale.id} />
+                    <UpdateSale id={client.id} />
+                    <DeleteSale id={client.id} />
                   </div>
                 </div>
               </div>
@@ -48,26 +49,23 @@ export default async function SalesTable({
                   Id
                 </th>
                 <th scope="col" className="px-4 py-2 font-normal sm:pl-6">
-                No Item
+                Name
                 </th>
                 <th scope="col" className="px-3 py-2 font-normal">
-                  Qty
+                  Address
                 </th>
                 <th scope="col" className="px-3 py-2 font-normal">
-                  Price GTQ
+                 Departamento
                 </th>
                 <th scope="col" className="px-3 py-2 font-normal">
-                  Discount GTQ
+                 Municipio
                 </th>
                 <th scope="col" className="px-3 py-2 font-normal">
-                  Total GTQ
+                 Zone
                 </th> 
                 <th scope="col" className="px-4 py-2 font-normal sm:pl-6">
-                  Id Shipping
+                Phone
                 </th>              
-                <th scope="col" className="px-3 py-2 font-normal">
-                  Status
-                </th>
                 <th scope="col" className="px-3 py-2 font-normal">
                   Create Date
                 </th>
@@ -77,42 +75,39 @@ export default async function SalesTable({
               </tr>
             </thead>
             <tbody className="bg-white border">
-              {sales?.map((sale) => (
+              {clients?.map((client) => (
                 <tr
-                  key={sale.id}
+                  key={client.id}
                   className="w-full border py-3 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg hover:bg-gray-50">
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {sale.id}
+                   {client.id}
                   </td>
                   <td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-300">
-                    {sale.noitem}
+                    {client.name}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                    {sale.qty}
+                    {client.address}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {formatCurrencyGT(sale.price)}
+                   {client.depto}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {formatCurrencyGT(sale.discount)}
+                  {client.city}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {formatCurrencyGT(sale.total)}
+                  {client.zone}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {sale.id_shipping}
+                  {client.phone}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {sale.status}
+                  {formatDateToLocal(client.create_date)}
                   </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {formatDateToLocal(sale.create_date)}
-                  </td>
-
                   <td className="whitespace-nowrap py-1 pl-6 pr-3 hover:border hover:border-blue-300">
                     <div className="flex justify-end gap-1">
-                     <UpdateSale id={sale.id} />
-                      <DeleteSale id={sale.id} />
+                    <CreateSale id={client.id} />
+                     <UpdateSale id={client.id} />
+                      <DeleteSale id={client.id} />
                     </div>
                   </td>
                 </tr>

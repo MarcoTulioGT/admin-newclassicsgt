@@ -129,6 +129,7 @@ export type User = {
   name: string;
   images: string;
   category: string;
+  price: string;
   };
 
   export type CategoryField = {

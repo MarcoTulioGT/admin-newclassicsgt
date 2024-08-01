@@ -55,8 +55,15 @@ images: z.string(),
 
 const FormSchemaSale =z.object({
   id: z.string(),
+  name: z.string(),
+  address: z.string(),
+  depto: z.string(),
+  city: z.string(),
+  zone: z.string(),
+  phone: z.string(),
   id_shipping: z.string(),
   noitem: z.string(),
+  shipping_cost: z.string(),
   qty: z.coerce.number().gt(0, { message: 'Please enter a qty greater or equal 0.' }),
   price: z.coerce.number().gt(0, { message: 'Please enter a price greater than $0.' }),
   discount: z.coerce.number().gt(-1, { message: 'Please enter a discount greater than $0.' }),
@@ -75,7 +82,8 @@ const UpdateCategory = FormSchemaCategory.omit({ id: true, parentid: true});
 const CreatePurchase = FormSchemaPurchase.omit({ id: true });
 const UpdatePurchase = FormSchemaPurchase.omit({ id: true, images: true});
 
-const UpdateSale = FormSchemaSale.omit({id: true, id_shipping: true, noitem: true, create_date: true, status: true});
+const CreateSale = FormSchemaSale.omit({id: true, create_date: true, status: true, id_shipping: true});
+const UpdateSale = FormSchemaSale.omit({id: true, name: true, address: true, depto: true, city: true, zone: true, phone: true, shipping_cost: true, id_shipping: true, noitem: true, create_date: true, status: true});
 
 
 export type State = {
@@ -460,6 +468,62 @@ export async function createPurchase(prevState: State, formData: FormData) {
   // Revalidate the cache for the categories page and redirect the user.
   revalidatePath('/ui/dashboard/purchases');
   redirect('/ui/dashboard/purchases');
+}
+
+export async function createSale(prevState: State, formData: FormData) {
+  console.log(formData)
+    const validatedFields = CreateSale.safeParse({
+    name: formData.get("client"),
+    address: formData.get("address"),
+    depto: formData.get('depto'),
+    city: formData.get('municipio'),
+    zone: formData.get('zona'),
+    phone: formData.get('phone'),
+    shipping_cost: formData.get('shipcost'),
+    noitem: formData.get('product'),
+    qty: formData.get('qty'),
+    price: formData.get('price'),
+    discount: formData.get('discount'),
+    total: formData.get('total')
+    });
+
+    // If form validation fails, return errors early. Otherwise, continue.
+    if (!validatedFields.success) {
+    //console.log(validatedFields.error.flatten().fieldErrors)
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Missing Fields. Failed to Create Sales.',
+      };
+  }
+    
+     // Prepare data for insertion into the database
+    const { name, address, depto, city, zone, phone, shipping_cost, noitem, qty, price, discount, total} = validatedFields.data;
+    try {
+    const id_client = await sql`
+    INSERT INTO clients (name, address, depto, city, zone, phone)
+    VALUES (${name}, ${address}, ${depto}, ${city}, ${zone}, ${phone})
+    RETURNING id ;
+  `;
+    const id_shipping = await sql`
+    INSERT INTO shippings (client_id, shipping_cost, status)
+    VALUES (${id_client.rows[0].id}, ${floatToNumber(shipping_cost)}, 'backordered')
+    RETURNING id ;
+  `;
+    console.log(id_shipping)
+    const id_sale = await sql`
+    INSERT INTO sales (id_shipping, noitem, qty, price, discount, total )
+    VALUES (${id_shipping.rows[0].id}, ${noitem}, ${qty}, ${floatToNumber(price)}, ${floatToNumber(discount)}, ${floatToNumber(total)})
+    RETURNING id ;
+    `;
+    } catch (error){
+      return {
+        message: 'Database Error: Failed to Create Sales.',
+      };
+    }
+
+  // Revalidate the cache for the categories page and redirect the user.
+  revalidatePath('/ui/dashboard/sales');
+  redirect('/ui/dashboard/sales');
 }
 
 
