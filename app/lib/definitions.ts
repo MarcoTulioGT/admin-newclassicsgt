@@ -156,6 +156,15 @@ export type User = {
     cost: number;
     status: 'filling' | 'paid' | 'intransit' | 'delivered';
   };
+
+  export type ShippingForm = {
+    id: string;
+    client_id: string;
+    shipping_cost: number;
+    status: 'backordered' | 'paid' | 'intransit' | 'delivered';
+    updated_date: string; 
+
+  }
   
   export type CategoryForm = {
     id: string;

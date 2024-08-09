@@ -5,6 +5,7 @@ import {
   BoxField,
   BoxForm,
   CategoryForm,
+  ShippingForm,
   BoxesTable,
   CategoriesTable,
   ProductsTable,
@@ -553,7 +554,8 @@ export async function fetchFilteredShippings(query: string,
        client_id,
        shipping_cost,
        status,
-       create_date
+       create_date,
+       updated_date
        FROM shippings
        WHERE
        shippings.id::TEXT ILIKE ${`%${query}%`} OR
@@ -710,6 +712,30 @@ export async function fetchSaleById(id: string){
   }
 }
 
+export async function fetchShippingById(id: string) {
+  noStore();
+  try {
+    const data = await sql<ShippingForm>`
+      SELECT
+      shippings.id,
+      shippings.client_id,
+      shippings.shipping_cost,     
+      shippings.status,
+      shippings.updated_date
+      FROM shippings
+      WHERE shippings.id = ${id};
+    `;
+
+    const shipping = data.rows.map((shipping) => ({
+      ...shipping,
+    }));
+    
+    return shipping[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch shipping.');
+  }
+}
 
 export async function fetchBoxes() {
   noStore();

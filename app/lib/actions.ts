@@ -73,6 +73,16 @@ const FormSchemaSale =z.object({
 });
 
 
+const FormSchemaShipping = z.object({
+  id: z.string(),
+  client_id: z.string(),
+  shipping_cost: z.coerce.number(),
+  status: z.string(),
+  create_date: z.coerce.number(),
+  updated_date: z.string(),
+});
+
+
 const CreateBox = FormSchema.omit({ id: true, box_id: true  });
 const UpdateBox = FormSchema.omit({ id: true, box_id: true });
 
@@ -85,6 +95,8 @@ const UpdatePurchase = FormSchemaPurchase.omit({ id: true, images: true});
 const CreateSale = FormSchemaSale.omit({id: true, create_date: true, status: true, id_shipping: true});
 const UpdateSale = FormSchemaSale.omit({id: true, name: true, address: true, depto: true, city: true, zone: true, phone: true, shipping_cost: true, id_shipping: true, noitem: true, create_date: true, status: true});
 
+const CreateShipping = FormSchemaShipping.omit({ id: true, box_id: true  });
+const UpdateShipping = FormSchemaShipping.omit({ id: true, client_id: true, create_date: true, updated_date: true });
 
 export type State = {
   errors?: {
@@ -321,6 +333,39 @@ export async function updateSale(id: string, prevState: State, formData: FormDat
    redirect('/ui/dashboard/sales');
 }
 
+
+export async function updateShipping(id: string, prevState: State, formData: FormData) {
+
+  const validatedFields = UpdateShipping.safeParse({
+    shipping_cost: formData.get('shipping_cost'),
+    status: formData.get('status'),
+ });
+ 
+ if (!validatedFields.success) {
+  console.log(validatedFields.error.flatten().fieldErrors)
+   return {
+     errors: validatedFields.error.flatten().fieldErrors,
+     message: 'Missing Fields. Failed to updateShipping.',
+   };
+ }
+ 
+   const {  shipping_cost , status} = validatedFields.data; 
+   try {
+   await sql`
+     UPDATE shippings
+     SET shipping_cost = ${shipping_cost*100}, status = ${status}, updated_date = current_date
+     WHERE id = ${id}
+   `;
+   }catch (error){
+    console.log(error)
+     return { message: 'Database Error: Failed to updateShipping.'};
+   }
+  
+   revalidatePath('/ui/dashboard/shipping');
+   redirect('/ui/dashboard/shipping');
+}
+
+
 export async function deleteBox(id: string) {
     //throw new Error('Failed to Delete Box');
 
@@ -368,6 +413,19 @@ export async function deleteSale(id: string) {
     return { message: 'Database Error: Failed to Delete Sale.'};
   }
 }
+
+export async function deleteShipping(id: string) {
+  //throw new Error('Failed to Delete Shipping');
+
+  try{
+  await sql`DELETE FROM shippings WHERE id = ${id}`;
+  revalidatePath('/ui/dashboard/shipping');
+  return { message: 'Deleted Shipping'};
+  }catch (error){
+    return { message: 'Database Error: Failed to Delete Shipping.'};
+  }
+}
+
 
 export async function createCategory(prevState: State, formData: FormData) {
 

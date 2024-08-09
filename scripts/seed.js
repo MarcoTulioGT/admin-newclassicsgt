@@ -7,11 +7,11 @@ CREATE TABLE IF NOT EXISTS boxes (
 
 
     INSERT INTO boxes (box_id, cost, status, delivery_date)
-        VALUES ( 'box_08062024', 330, 'filling', '2024-06-07')
+        VALUES ( 'box_08062024', 33000, 'delivered', '2024-06-13')
         ON CONFLICT (id) DO NOTHING;
 
     INSERT INTO boxes (box_id, cost, status)
-    VALUES ( 'box_01092024', 36000, 'filling')
+    VALUES ( 'box_01092024', 36000, 'filling','')
     ON CONFLICT (id) DO NOTHING;
 
     INSERT INTO users (id, name, email, password)
@@ -214,3 +214,5 @@ CREATE TABLE IF NOT EXISTS boxes (
 
             insert into departaments(departamento, municipio)
             values('Escuintla', '[{"Municipio":"Escuintla", "zonas":[1,2,3,4,5]}, {"Municipio":"Palín", "zonas":[1]}]')
+             insert into departaments(departamento, municipio)
+            values('San Marcos', '[{"Municipio":"Pajapita", "zonas":[1]}]')

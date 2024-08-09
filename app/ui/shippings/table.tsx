@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import { UpdateSale, DeleteSale } from '@/app/ui/shippings/buttons';
+import { UpdateShipping, DeleteShipping } from '@/app/ui/shippings/buttons';
 import { formatDateToLocal, formatCurrency, formatCurrencyGT, formatPercent } from '@/app/lib/utils';
 import { fetchFilteredShippings } from '@/app/lib/data';
-
+import ShippingStatus from '@/app/ui/shippings/status';
 export default async function ShippingsTable({
   query,
   currentPage,
@@ -35,8 +35,8 @@ export default async function ShippingsTable({
                     <p>{shipping.status}</p>
                   </div>
                   <div className="flex justify-end gap-1">
-                    <UpdateSale id={shipping.id} />
-                    <DeleteSale id={shipping.id} />
+                    <UpdateShipping id={shipping.id} />
+                    <DeleteShipping id={shipping.id} />
                   </div>
                 </div>
               </div>
@@ -60,6 +60,9 @@ export default async function ShippingsTable({
                 <th scope="col" className="px-3 py-2 font-normal">
                   Create Date
                 </th>
+                <th scope="col" className="px-3 py-2 font-normal">
+                  Update Date
+                </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
                 </th>
@@ -77,18 +80,21 @@ export default async function ShippingsTable({
                     {shipping.client_id}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                    {shipping.shipping_cost}
+                    {formatCurrencyGT(shipping.shipping_cost)}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {shipping.status}
+                  <ShippingStatus status={shipping.status} />
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                   {formatDateToLocal(shipping.create_date)}
                   </td>
+                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                  {formatDateToLocal(shipping.updated_date)}
+                  </td>
                   <td className="whitespace-nowrap py-1 pl-6 pr-3 hover:border hover:border-blue-300">
                     <div className="flex justify-end gap-1">
-                     <UpdateSale id={shipping.id} />
-                      <DeleteSale id={shipping.id} />
+                     <UpdateShipping id={shipping.id} />
+                      <DeleteShipping id={shipping.id} />
                     </div>
                   </td>
                 </tr>
