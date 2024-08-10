@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { UpdateSale, DeleteSale, CreateSale } from '@/app/ui/clients/buttons';
+import { UpdateClient, DeleteClient, CreateClient } from '@/app/ui/clients/buttons';
 import { formatDateToLocal, formatCurrency, formatCurrencyGT, formatPercent } from '@/app/lib/utils';
 import { fetchFilteredClient } from '@/app/lib/data';
 
@@ -11,7 +11,7 @@ export default async function ClientsTable({
   currentPage: number;
 }) {
   const clients = await fetchFilteredClient(query, currentPage);
-  console.log(clients)
+
   return (
     <div className="mt-1 flow-root">
       <div className="inline-block min-w-full align-middle">
@@ -35,8 +35,8 @@ export default async function ClientsTable({
                     <p>{client.zone}</p>
                   </div>
                   <div className="flex justify-end gap-1">
-                    <UpdateSale id={client.id} />
-                    <DeleteSale id={client.id} />
+                    <UpdateClient id={client.id} />
+                    <DeleteClient id={client.id} />
                   </div>
                 </div>
               </div>
@@ -105,9 +105,9 @@ export default async function ClientsTable({
                   </td>
                   <td className="whitespace-nowrap py-1 pl-6 pr-3 hover:border hover:border-blue-300">
                     <div className="flex justify-end gap-1">
-                    <CreateSale id={client.id} />
-                     <UpdateSale id={client.id} />
-                      <DeleteSale id={client.id} />
+                    <CreateClient id={client.id} />
+                     <UpdateClient id={client.id} />
+                      <DeleteClient id={client.id} />
                     </div>
                   </td>
                 </tr>

@@ -83,6 +83,16 @@ const FormSchemaShipping = z.object({
 });
 
 
+const FormSchemaClient = z.object({
+  id: z.string(),
+  name: z.string(),
+  address: z.coerce.string(),
+  depto: z.string(),
+  city: z.string(),
+  zone: z.string(),
+  phone: z.string(),
+});
+
 const CreateBox = FormSchema.omit({ id: true, box_id: true  });
 const UpdateBox = FormSchema.omit({ id: true, box_id: true });
 
@@ -97,6 +107,8 @@ const UpdateSale = FormSchemaSale.omit({id: true, name: true, address: true, dep
 
 const CreateShipping = FormSchemaShipping.omit({ id: true, box_id: true  });
 const UpdateShipping = FormSchemaShipping.omit({ id: true, client_id: true, create_date: true, updated_date: true });
+
+const UpdateClient = FormSchemaClient.omit({ id: true });
 
 export type State = {
   errors?: {
@@ -361,10 +373,44 @@ export async function updateShipping(id: string, prevState: State, formData: For
      return { message: 'Database Error: Failed to updateShipping.'};
    }
   
-   revalidatePath('/ui/dashboard/shipping');
-   redirect('/ui/dashboard/shipping');
+   revalidatePath('/ui/dashboard/shippings');
+   redirect('/ui/dashboard/shippings');
 }
 
+export async function updateClient(id: string, prevState: State, formData: FormData) {
+
+  const validatedFields = UpdateClient.safeParse({
+    name: formData.get('name'),
+    address: formData.get('address'),
+    depto: formData.get('depto'),
+    city: formData.get('city'),
+    zone: formData.get('zone'),
+    phone: formData.get('phone'),
+ });
+
+ if (!validatedFields.success) {
+  console.log(validatedFields.error.flatten().fieldErrors)
+   return {
+     errors: validatedFields.error.flatten().fieldErrors,
+     message: 'Missing Fields. Failed to update clients.',
+   };
+ }
+ 
+   const {  name , address, depto, city, zone, phone} = validatedFields.data; 
+   try {
+   await sql`
+     UPDATE clients
+     SET name = ${name}, address = ${address}, depto = ${depto}, city = ${city}, zone = ${zone}, phone = ${phone},  updated_date = current_date
+     WHERE id = ${id}
+   `;
+   }catch (error){
+    console.log(error)
+     return { message: 'Database Error: Failed to update clients.'};
+   }
+  
+   revalidatePath('/ui/dashboard/clients');
+   redirect('/ui/dashboard/clients');
+}
 
 export async function deleteBox(id: string) {
     //throw new Error('Failed to Delete Box');
@@ -426,6 +472,18 @@ export async function deleteShipping(id: string) {
   }
 }
 
+
+export async function  deleteClient(id: string) {
+  //throw new Error('Failed to Delete Shipping');
+
+  try{
+  await sql`DELETE FROM clients WHERE id = ${id}`;
+  revalidatePath('/ui/dashboard/clients');
+  return { message: 'Deleted client'};
+  }catch (error){
+    return { message: 'Database Error: Failed to Delete Client.'};
+  }
+}
 
 export async function createCategory(prevState: State, formData: FormData) {
 

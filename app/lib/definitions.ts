@@ -205,3 +205,15 @@ export type User = {
 
   }
 
+export type ClientForm={
+  id: string;
+  name: string;
+  address: string;
+  city: string;
+  depto: string;
+  zone: number;
+  phone: number;
+  create_date: string;
+  updated_date: string;
+
+}

@@ -6,6 +6,7 @@ import {
   BoxForm,
   CategoryForm,
   ShippingForm,
+  ClientForm,
   BoxesTable,
   CategoriesTable,
   ProductsTable,
@@ -734,6 +735,33 @@ export async function fetchShippingById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch shipping.');
+  }
+}
+
+export async function fetchClientById(id: string){
+  noStore();
+  try {
+    const data = await sql<ClientForm>`
+      SELECT
+      clients.id,
+      clients.name,
+      clients.address,     
+      clients.depto,
+      clients.city,
+      clients.zone,
+      clients.phone
+      FROM clients
+      WHERE clients.id = ${id};
+    `;
+
+    const client = data.rows.map((client) => ({
+      ...client,
+    }));
+    
+    return client[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch client.');
   }
 }
 

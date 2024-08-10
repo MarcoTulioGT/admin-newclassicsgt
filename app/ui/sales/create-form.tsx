@@ -84,7 +84,7 @@ export default function Form({ departamentos , products}: { departamentos: Depar
     <form action={dispatch}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
 
-          {/* purchase Name */}
+          {/* Sales Name */}
          <div className="mb-4">
           <label htmlFor="client" className="mb-2 block text-xs font-medium">
             Client name
@@ -112,7 +112,7 @@ export default function Form({ departamentos , products}: { departamentos: Depar
           </div>
         </div>
 
-          {/* purchase Address */}
+          {/* Sales Address */}
           <div className="mb-4">
           <label htmlFor="address" className="mb-2 block text-xs font-medium">
             Address
