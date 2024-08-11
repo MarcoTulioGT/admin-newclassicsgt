@@ -1,5 +1,5 @@
 'use client';
-import {  DepartamentField, ProductsField } from '@/app/lib/definitions';
+import { ClientForm, DepartamentField, ProductsField } from '@/app/lib/definitions';
 import Link from 'next/link';
 import {
   CheckIcon,
@@ -26,9 +26,10 @@ import { useState, useEffect } from 'react';
 import { formatDateToLocal, formatDateGT, DollarToQt, floatToNumber, formatCurrencyGT} from '@/app/lib/utils';
 
 
-export default function Form({ departamentos , products}: {   departamentos: DepartamentField[] , products: ProductsField[] }) { 
+export default function Form({ client, departamentos , products}: {  client: ClientForm, departamentos: DepartamentField[] , products: ProductsField[] }) { 
 
 
+    console.log(client)
 
   let deptos = departamentos.map(function(element, index){
     return  element.departamento
@@ -45,7 +46,6 @@ export default function Form({ departamentos , products}: {   departamentos: Dep
   const [priceValue, setPrice] = useState(0);
   const [discountValue, setDiscount] = useState(0);
   const [product, setProduct] = useState('')
-
 
   const handleInputChangeQty = e => {
     setQty(e.target.value)
@@ -98,8 +98,9 @@ export default function Form({ departamentos , products}: {   departamentos: Dep
                 id="client"
                 name="client"
                 type="text"
+                defaultValue={client.name}
                 placeholder="Enter client"
-                className="peer block w-full rounded-md border bg-sky-100 hover:bg-yellow-50 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  bg-gray-300 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"   
                 aria-describedby="client-error"
               />
               <InformationCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -126,8 +127,9 @@ export default function Form({ departamentos , products}: {   departamentos: Dep
                 id="address"
                 name="address"
                 type="text"
+                defaultValue={client.address}
                 placeholder="Enter address"
-                className="peer block w-full rounded-md border bg-sky-100 hover:bg-yellow-50 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  bg-gray-300 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"   
                 aria-describedby="address-error"
               />
               <InformationCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -157,7 +159,7 @@ export default function Form({ departamentos , products}: {   departamentos: Dep
               name="depto"
               onChange={handleSelectChangeDepto}
               value={depto}
-              className="peer block w-full cursor-pointer rounded-md border  bg-sky-100 hover:bg-yellow-50 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"            
+              className="peer block w-full rounded-md border  bg-gray-300 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"   
               >
               <option value="" disabled>
                 Select a departamento
@@ -184,7 +186,7 @@ export default function Form({ departamentos , products}: {   departamentos: Dep
               name="municipio"
               onChange={handleSelectChangeMuni}
               value={muni}
-              className="peer block w-full cursor-pointer rounded-md border  bg-sky-100 hover:bg-yellow-50 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"            
+              className="peer block w-full rounded-md border  bg-gray-300 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"   
               >
               <option value="" disabled>
                 Select a municipio
@@ -210,7 +212,7 @@ export default function Form({ departamentos , products}: {   departamentos: Dep
               name="zona"
               onChange={handleSelectChangeZone}
               value={zona}
-              className="peer block w-full cursor-pointer rounded-md border  bg-sky-100 hover:bg-yellow-50 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"            
+              className="peer block w-full rounded-md border  bg-gray-300 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"           
               >
               <option value="" disabled>
                 Select a zona
@@ -236,9 +238,10 @@ export default function Form({ departamentos , products}: {   departamentos: Dep
               <input
                 id="phone"
                 name="phone"
-                type="text"                
+                type="text"   
+                defaultValue={client.phone}             
                 placeholder="Enter phone number"
-                className="peer block w-full rounded-md border bg-sky-100 hover:bg-yellow-50 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  bg-gray-300 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"
                 aria-describedby="phone-error"
               />
               <ListBulletIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
