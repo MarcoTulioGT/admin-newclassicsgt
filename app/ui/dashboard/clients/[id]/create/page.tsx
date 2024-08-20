@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Create Sale',
+  title: 'Create Sale Exist Client',
 };
 
  
@@ -21,10 +21,10 @@ export default async function Page({ params }: { params: { id: string } }) {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Sales', href: '/ui/dashboard/sales' },
+          { label: 'Sales', href: '/ui/dashboard/clients' },
           {
-            label: 'Create Sale',
-            href: `/ui/dashboard/sales/${id}/create`,
+            label: 'Create Sale With Exist Client',
+            href: `/ui/dashboard/clients/${id}/create`,
             active: true,
           },
         ]}

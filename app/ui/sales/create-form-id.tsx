@@ -20,7 +20,7 @@ import {
   ReceiptPercentIcon
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
-import { createSale } from '@/app/lib/actions';
+import { createSaleWClient } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import { useState, useEffect } from 'react';
 import { formatDateToLocal, formatDateGT, DollarToQt, floatToNumber, formatCurrencyGT} from '@/app/lib/utils';
@@ -30,16 +30,17 @@ export default function Form({ client, departamentos , products}: {  client: Cli
 
 
     console.log(client)
+  
 
   let deptos = departamentos.map(function(element, index){
     return  element.departamento
    });
 
   const initialState = { message: null, errors: {} };
-  const [state, dispatch] = useFormState(createSale, initialState);
-  const [depto, setDepto] = useState('');
-  const [muni, setMuni] = useState('');
-  const [zona, setZona] = useState('');
+  const [state, dispatch] = useFormState(createSaleWClient, initialState);
+  const [depto, setDepto] = useState(client.depto);
+  const [muni, setMuni] = useState(client.city);
+  const [zona, setZona] = useState(client.zone);
   const [municipios, setMunicipios] = useState([]);
   const [zonas, setZonas] = useState([]);
   const [qtyValue, setQty] = useState(1);
@@ -86,6 +87,36 @@ export default function Form({ client, departamentos , products}: {  client: Cli
     <div>
     <form action={dispatch}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
+
+
+          {/* Sales Name id*/}
+          <div className="mb-4">
+          <label htmlFor="clientid" className="mb-2 block text-xs font-medium">
+            Client id
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="clientid"
+                name="clientid"
+                type="text"
+                defaultValue={client.id}
+                placeholder="Enter clientid"
+                className="peer block w-full rounded-md border  bg-gray-300 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"   
+                aria-describedby="clientid-error"
+              />
+              <InformationCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+            </div>
+            <div id="clientid-error" aria-live="polite" aria-atomic="true">
+        {state.errors?.clientid &&
+          state.errors.clientid.map((error: string) => (
+            <p className="mt-2 text-xs text-red-500" key={error}>
+              {error}
+            </p>
+          ))}
+      </div>
+          </div>
+        </div>
 
           {/* Sales Name */}
          <div className="mb-4">
@@ -142,88 +173,6 @@ export default function Form({ client, departamentos , products}: {  client: Cli
             </p>
           ))}
       </div>
-          </div>
-        </div>
-
-
-
-
-{/* departamento */}
-<div className="mb-4">
-          <label htmlFor="depto" className="mb-2 block text-xs font-medium">
-            Choose departamento
-          </label>
-          <div className="relative">
-            <select
-              id="depto"
-              name="depto"
-              onChange={handleSelectChangeDepto}
-              value={depto}
-              className="peer block w-full rounded-md border  bg-gray-300 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"   
-              >
-              <option value="" disabled>
-                Select a departamento
-              </option>
-              {deptos.map((d) => (
-                <option key={d} value={d}>
-                  {d}
-                </option>
-              ))}
-            </select>
-            <ArchiveBoxArrowDownIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-          </div>
-        </div>
-
-
-{/* municipio */}
-<div className="mb-4">
-          <label htmlFor="municipio" className="mb-2 block text-xs font-medium">
-            Choose municipio
-          </label>
-          <div className="relative">
-            <select
-              id="municipio"
-              name="municipio"
-              onChange={handleSelectChangeMuni}
-              value={muni}
-              className="peer block w-full rounded-md border  bg-gray-300 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"   
-              >
-              <option value="" disabled>
-                Select a municipio
-              </option>
-              {municipios.map((m) => (
-                <option key={m.Municipio} value={m.Municipio}>
-                  {m.Municipio}
-                </option>
-              ))}
-            </select>
-            <ArchiveBoxArrowDownIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-          </div>
-        </div>
-
-{/* zona */}
-<div className="mb-4">
-          <label htmlFor="zona" className="mb-2 block text-xs font-medium">
-            Choose zona
-          </label>
-          <div className="relative">
-            <select
-              id="zona"
-              name="zona"
-              onChange={handleSelectChangeZone}
-              value={zona}
-              className="peer block w-full rounded-md border  bg-gray-300 border-gray-200 py-2 pl-10 text-xs outline-2 placeholder:text-gray-500"           
-              >
-              <option value="" disabled>
-                Select a zona
-              </option>
-              {zonas.map((m) => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
-            <ArchiveBoxArrowDownIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
         </div>
 
@@ -455,12 +404,12 @@ export default function Form({ client, departamentos , products}: {  client: Cli
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
-          href="/ui/dashboard/sales"
+          href="/ui/dashboard/clients"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
           Cancel
         </Link>
-        <Button type="submit">Add Purchase</Button>
+        <Button type="submit">Add Sale</Button>
       </div>
     </form>
     <div>      

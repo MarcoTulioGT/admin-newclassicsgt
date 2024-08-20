@@ -55,6 +55,7 @@ images: z.string(),
 
 const FormSchemaSale =z.object({
   id: z.string(),
+  clientid: z.string(),
   name: z.string(),
   address: z.string(),
   depto: z.string(),
@@ -102,13 +103,15 @@ const UpdateCategory = FormSchemaCategory.omit({ id: true, parentid: true});
 const CreatePurchase = FormSchemaPurchase.omit({ id: true });
 const UpdatePurchase = FormSchemaPurchase.omit({ id: true, images: true});
 
-const CreateSale = FormSchemaSale.omit({id: true, create_date: true, status: true, id_shipping: true});
-const UpdateSale = FormSchemaSale.omit({id: true, name: true, address: true, depto: true, city: true, zone: true, phone: true, shipping_cost: true, id_shipping: true, noitem: true, create_date: true, status: true});
+const CreateSale = FormSchemaSale.omit({id: true, create_date: true, status: true, id_shipping: true, clientid: true});
+const UpdateSale = FormSchemaSale.omit({id: true, name: true, address: true, depto: true, city: true, zone: true, phone: true, shipping_cost: true, id_shipping: true, noitem: true, create_date: true, status: true, clientid: true});
 
 const CreateShipping = FormSchemaShipping.omit({ id: true, box_id: true  });
 const UpdateShipping = FormSchemaShipping.omit({ id: true, client_id: true, create_date: true, updated_date: true });
 
 const UpdateClient = FormSchemaClient.omit({ id: true });
+
+const CreateSaleWClient = FormSchemaSale.omit({ id: true, name: true, depto: true, city: true, zone: true, address: true, status: true, id_shipping: true, create_date:true, phone:true});
 
 export type State = {
   errors?: {
@@ -641,6 +644,60 @@ export async function createSale(prevState: State, formData: FormData) {
   revalidatePath('/ui/dashboard/sales');
   redirect('/ui/dashboard/sales');
 }
+
+export async function createSaleWClient(prevState: State, formData: FormData) {
+  console.log(formData)
+    const validatedFields = CreateSaleWClient.safeParse({
+    clientid: formData.get('clientid'),
+    shipping_cost: formData.get('shipcost'),
+    noitem: formData.get('product'),
+    qty: formData.get('qty'),
+    price: formData.get('price'),
+    discount: formData.get('discount'),
+    total: formData.get('total')
+    });
+
+    // If form validation fails, return errors early. Otherwise, continue.
+    if (!validatedFields.success) {
+    //console.log(validatedFields.error.flatten().fieldErrors)
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Missing Fields. Failed to Create Sales W Clients.',
+      };
+  }
+    
+     // Prepare data for insertion into the database
+    const { clientid, shipping_cost, noitem, qty, price, discount, total} = validatedFields.data;
+
+    console.log(clientid)
+    console.log(shipping_cost)
+    console.log(noitem)
+    console.log(discount)
+    console.log(qty)
+    console.log(total)
+    try {
+    const id_shipping = await sql`
+    INSERT INTO shippings (client_id, shipping_cost, status)
+    VALUES (${clientid}, ${floatToNumber(shipping_cost)}, 'backordered')
+    RETURNING id ;
+  `;
+    console.log(id_shipping)
+    const id_sale = await sql`
+    INSERT INTO sales (id_shipping, noitem, qty, price, discount, total )
+    VALUES (${id_shipping.rows[0].id}, ${noitem}, ${qty}, ${floatToNumber(price)}, ${floatToNumber(discount)}, ${floatToNumber(total)})
+    RETURNING id ;
+    `;
+    } catch (error){
+      return {
+        message: 'Database Error: Failed to Create Sales W client.',
+      };
+    }
+
+  // Revalidate the cache for the categories page and redirect the user.
+  revalidatePath('/ui/dashboard/sales');
+  redirect('/ui/dashboard/sales');
+}
+
 
 
 export async function authenticate(

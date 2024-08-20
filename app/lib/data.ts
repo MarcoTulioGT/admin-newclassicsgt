@@ -400,6 +400,7 @@ export async function fetchFilteredSales(
       WHERE
       S.noitem ILIKE ${`%${query}%`} OR
       SH.status ILIKE ${`%${query}%`} OR
+      S.id_shipping::text ILIKE ${`%${query}%`} OR
       S.create_date::text ILIKE ${`%${query}%`} 
       ORDER BY S.create_date asc
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
@@ -940,6 +941,7 @@ export async function fetchSalesPages(query: string){
     WHERE
     S.id::text  ILIKE ${`%${query}%`} OR
     SH.status ILIKE ${`%${query}%`} OR
+    S.id_shipping::text ILIKE ${`%${query}%`} OR
     S.noitem ILIKE ${`%${query}%`} OR
     S.create_date::text ILIKE ${`%${query}%`}
   `;
