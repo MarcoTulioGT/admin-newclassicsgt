@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { UpdateBox, DeleteCategory } from '@/app/ui/categories/buttons';
 import CategoryStatus from '@/app/ui/categories/status';
-import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
+import { formatDateToLocal, formatCurrency , formatCurrencyGT} from '@/app/lib/utils';
 import { fetchFilteredProducts } from '@/app/lib/data';
 
 export default async function ProductsTable({
@@ -54,43 +54,22 @@ export default async function ProductsTable({
                   Name
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
-                  Cnt Avail
+                  Cant. purchase
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
-                  Count Sold
+                  Cant. sold
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
-                  Count Incoming
+                  Cant. available
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
-                  Investment $
+                  Investment GTQ
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
-                  Unit Price Purchase
+                  Total Utility GTQ
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
-                  Sum price purchase Q
-                </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Cost Shipping US
-                </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Cost Shipping GT
-                </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Cost Shipping Unit Total
-                </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Purchase Price
-                </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Profit %
-                </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Sale Price
-                </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Utility
+                  Total Sale GTQ
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
                   Box
@@ -100,18 +79,6 @@ export default async function ProductsTable({
                 </th>
                 <th scope="col" className="px-3 py-2 font-medium">
                   Images
-                </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Created Date
-                </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Status
-                </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Updated Date
-                </th>
-                <th scope="col" className="relative py-3 pl-6 pr-3">
-                  <span className="sr-only">Edit</span>
                 </th>
               </tr>
             </thead>
@@ -127,51 +94,31 @@ export default async function ProductsTable({
                     {product.name}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                    {product.count_available}
+                    {product.qtypurchase}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {product.count_sold}
+                   {product.qtysale}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {product.count_incoming}
+                   {product.qtypurchase-product.qtysale}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {product.investment_dollar}
+                   {formatCurrencyGT(product.costotal)}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {product.unit_price_purchase}
+                   {formatCurrencyGT(product.totalutilitybyp)}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {product.sum_price_purchaseq}
+                   {formatCurrencyGT(product.total)}
                   </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {product.cost_shipping_us}
-                  </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {product.cost_shipping_gt}
-                  </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {product.cost_shipping_unit_total}
-                  </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {product.purchase_price}
-                  </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {product.profit_percentage}
-                  </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {product.sale_price}
-                  </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {product.utility}
-                  </td>
+
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {product.box}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {product.categories}
                   </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">           
+                  {/*<td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">           
                   <Image
                     src= {product.picture[0]}
                     alt={`${product.id}'s profile picture`}
@@ -179,22 +126,7 @@ export default async function ProductsTable({
                     width={40}
                     height={40}
                   />         
-                  </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {formatDateToLocal(product.create_date)}
-                  </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                    <CategoryStatus status={product.status} />
-                  </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
-                   {formatDateToLocal(product.updated_date)}
-                  </td>
-                  <td className="whitespace-nowrap py-1 pl-6 pr-3 hover:border hover:border-blue-300">
-                    <div className="flex justify-end gap-1">
-                     <UpdateBox id={product.id} />
-                      <DeleteCategory id={product.id} />
-                    </div>
-                  </td>
+                  </td>*/}
                 </tr>
               ))}
             </tbody>

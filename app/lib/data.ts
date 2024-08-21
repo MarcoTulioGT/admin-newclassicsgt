@@ -420,7 +420,7 @@ export async function fetchFilteredProducts(
   noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
   try {
-    const products = await sql<ProductsTable>`
+    /*const products = await sql<ProductsTable>`
       SELECT
       products.id,
       products.name,
@@ -451,7 +451,16 @@ export async function fetchFilteredProducts(
       products.create_date::text ILIKE ${`%${query}%`} 
       ORDER BY products.name asc
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
-    `;
+    `;*/
+
+    const products = await sql<ProductsTable>`
+    select sa.noitem, sa.qty as qtysale, sa.total , pu.name, pu.qty as qtypurchase, pu.costotal, pu.totalutilitybyp
+    from sales sa
+    left join  purchases pu
+    on sa.noitem = pu.noitem 
+    ORDER BY pu.name asc
+    LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+  `;
 
     return products.rows;
   } catch (error) {
