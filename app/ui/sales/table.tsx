@@ -96,7 +96,7 @@ export default async function SalesTable({
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {formatCurrencyGT(sale.discount)}
                   </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                  <td className="whitespace-nowrap  px-3 py-1 text-green-600 hover:border hover:border-blue-300">
                    {formatCurrencyGT(sale.total)}
                   </td>
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">

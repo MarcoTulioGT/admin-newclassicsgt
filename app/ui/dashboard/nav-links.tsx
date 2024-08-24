@@ -52,9 +52,15 @@ const links = [
     mobile: true,
   },
   {
-    name: 'Products',
-    href: '/ui/dashboard/products',
+    name: 'Inventory',
+    href: '/ui/dashboard/inventory',
     icon: RectangleGroupIcon,
+    mobile: false,
+  },
+  {
+    name: 'Box results',
+    href: '/ui/dashboard/box_results',
+    icon: SquaresPlusIcon,
     mobile: false,
   },
   {

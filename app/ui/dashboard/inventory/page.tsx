@@ -1,7 +1,7 @@
-import Pagination from '@/app/ui/products/pagination';
+import Pagination from '@/app/ui/inventory/pagination';
 import Search from '@/app/ui/search';
-import { CreateProduct} from '@/app/ui/products/buttons';
-import Table from '@/app/ui/products/table';
+import { CreateProduct} from '@/app/ui/inventory/buttons';
+import Table from '@/app/ui/inventory/table';
 import { rajdhani } from '@/app/ui/fonts';
 import { fetchProductsPages } from '@/app/lib/data';
 

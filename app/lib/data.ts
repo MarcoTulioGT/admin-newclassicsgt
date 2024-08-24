@@ -454,11 +454,25 @@ export async function fetchFilteredProducts(
     `;*/
 
     const products = await sql<ProductsTable>`
-    select sa.noitem, sa.qty as qtysale, sa.total , pu.name, pu.qty as qtypurchase, pu.costotal, pu.totalutilitybyp
-    from sales sa
-    left join  purchases pu
-    on sa.noitem = pu.noitem 
-    ORDER BY pu.name asc
+    select inventorywithganancia.*,
+    (inventorywithganancia.total-(inventorywithganancia.costsaleuq*inventorywithganancia.qtysale)) as ganancia 
+    from (select  
+    inventory.* , 
+    (select name from purchases where noitem = inventory.noitem limit 1) name, 
+    (select sum(qty) from sales where noitem = inventory.noitem ) as qtysale,
+    (select max(costsaleuq) from purchases where noitem = inventory.noitem ) as costsaleuq,
+    (select sum(total) from sales where noitem = inventory.noitem ) as total 
+    from (
+      select sa.noitem, 
+      sum(pu.qty) as qtypurchase, 
+      sum(pu.costotal) as costotal, 
+      (select name from categories where id = pu.category limit 1) category, 
+      pu.images
+          from sales sa
+          left join  purchases pu
+          on sa.noitem = pu.noitem
+          group by sa.noitem, pu.category ,pu.images) inventory ) inventorywithganancia
+      order by category    
     LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
   `;
 

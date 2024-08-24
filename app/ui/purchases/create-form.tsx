@@ -316,7 +316,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
 {/* Cost shipping US $ */}
  <div className="mb-4">
           <label htmlFor="costshipUS" className="mb-2 block text-xs font-medium">
-          Cost shipping US Q
+          Cost shipping CA to TN  GTQ
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -349,7 +349,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
         {/* Costo envio GT  */}
         <div className="mb-4">
           <label htmlFor="costShippingGT" className="mb-2 block text-xs font-medium">
-            Choose cost shipping Q GT.
+            Choose cost shipping TN to GT GTQ.
           </label>
           <div className="relative">
             <select
@@ -393,7 +393,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
          {/* Cost Total shipping C/U $ */}
          <div className="mb-4">
           <label htmlFor="costtotalshippingU" className="mb-2 block text-xs font-medium">
-          Cost total shipping U. Q
+          Cost total shipping Unit GTQ
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -428,7 +428,7 @@ export default function Form({ categories , boxes}: { purchases: CategoryField[]
         {/* Cost Total Envio GT by purchase*/}
         <div className="mb-4">
           <label htmlFor="costtotalbypurchase" className="mb-2 block text-xs font-medium">
-          Cost Total shipping GT by purchase $
+          Cost Total shipping TN to GT for purchase in the box $
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
