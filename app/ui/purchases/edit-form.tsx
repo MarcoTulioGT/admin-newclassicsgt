@@ -404,7 +404,7 @@ export default function EditPurchaseForm({
          {/* Cost Total shipping C/U $ */}
          <div className="mb-4">
           <label htmlFor="costtotalshippingU" className="mb-2 block text-xs font-medium">
-          Cost total shipping U. Q
+          Cost total shipping Unidad GTQ
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">

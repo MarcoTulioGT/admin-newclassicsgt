@@ -74,7 +74,7 @@ export default async function PurchasesTable({
                   Cost Shipping GT Q
                 </th>
                 <th scope="col" className="px-3 py-2 font-normal">
-                  Cost Total Shipping U. G
+                  Cost Total Shipping Unidad GT Q
                 </th>
                 <th scope="col" className="px-3 py-2 font-normal">
                 Cost Total shipping GT by purchase $

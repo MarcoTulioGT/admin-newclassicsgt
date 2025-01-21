@@ -296,6 +296,7 @@ export async function updatePurchase(id: string, prevState: State, formData: For
      costotal= ${floatToNumber(costotal)}, 
      costshipUS = ${floatToNumber(costshipUS)},
      costShippingGT = ${floatToNumber(costShippingGT)},
+     costtotalshippingU = ${floatToNumber(costtotalshippingU)},
      costtotalbypurchase = ${floatToNumber(costtotalbypurchase)},
      costsaleuq = ${floatToNumber(costsaleuq)},
      mu = ${mu},
