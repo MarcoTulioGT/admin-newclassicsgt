@@ -46,53 +46,53 @@ export default async function PurchasesTable({
           <table className="hidden min-w-full text-gray-600 sm:table">
             <thead className="rounded-lg text-left text-xs font-normal">
               <tr>
-                <th scope="col" className="px-3 py-2 font-normal">
+                <th scope="col" title="Id de la caja en donde ingresó la compra." className="px-3 py-2 font-normal">
                   Box
                 </th>
-                <th scope="col" className="px-4 py-2 font-normal sm:pl-6">
+                <th scope="col" title="Codigo de producto asignado en bodega." className="px-4 py-2 font-normal sm:pl-6">
                   No Item
                 </th>
-                <th scope="col" className="px-4 py-2 font-normal sm:pl-6">
+                <th scope="col" title="Nombre del producto" className="px-4 py-2 font-normal sm:pl-6">
                   Name
                 </th>
-                <th scope="col" className="px-3 py-2 font-normal">
+                <th scope="col" title="Cantidad comprada del producto en la orden." className="px-3 py-2 font-normal">
                   Qty
                 </th>
-                <th scope="col" className="px-3 py-2 font-normal">
+                <th scope="col" title="Costo Unitario en asignado en bodega en moneda $ " className="px-3 py-2 font-normal">
                   Cost U. $
                 </th>
                 {/*<th scope="col" className="px-3 py-2 font-normal">
                   Investment $
             </th>*/}
-                <th scope="col" className="px-3 py-2 font-normal">
-                  Costo Total Q
+                <th scope="col" title="Costo total en Q, Cantidad de productos comprados Qty por el costo en Q." className="px-3 py-2 font-normal">
+                  Costo Total
                 </th>
-                <th scope="col" className="px-3 py-2 font-normal">
-                  Cost Shipping US Q
+                <th scope="col" title="Costo de envio desde bodega hacia la caja en Q por unidad." className="px-3 py-2 font-normal">
+                Shipping U. US
                 </th>
-                <th scope="col" className="px-3 py-2 font-normal">
-                  Cost Shipping GT Q
+                <th scope="col" title="Costo de envio desde USA hacia Guatemala en Q por unidad." className="px-3 py-2 font-normal">
+                Shipping U. GT
                 </th>
-                <th scope="col" className="px-3 py-2 font-normal">
-                  Cost Total Shipping Unidad GT Q
+                <th scope="col" title="Costo total de envio, por unidad sumando los 2 shippings en Q" className="px-3 py-2 font-normal">
+                Total Shipping U.
                 </th>
-                <th scope="col" className="px-3 py-2 font-normal">
-                Cost Total shipping GT by purchase $
+                <th scope="col" title="Costo total de envio, por total de cantidad del producto desde USA hacia Guatemala en $. (Este valor sirve para definir el costo de envio entre el costo de la caja)" className="px-3 py-2 font-normal">
+                Total shipping GT by purchase
                 </th>
-                <th scope="col" className="px-3 py-2 font-normal">
-                  Cost Sale U. Q
+                <th scope="col" title="Costo de venta unitario en Q." className="px-3 py-2 font-normal">
+                  Cost Sale U.
                 </th>
-                <th scope="col" className="px-3 py-2 font-normal">
+                <th scope="col" title="MU %: El porcentaje que representa el margen agregado al costo." className="px-3 py-2 font-normal">
                   MU
                 </th>
-                <th scope="col" className="px-3 py-2 font-normal">
-                  Price Sale U. GTQ
+                <th scope="col" title="Precio de venta en GTQ." className="px-3 py-2 font-normal">
+                  Price Sale
                 </th>
-                <th scope="col" className="px-3 py-2 font-normal">
+                <th scope="col" title="Utilidad por la venta unitaria." className="px-3 py-2 font-normal">
                   Utility
                 </th>
-                <th scope="col" className="px-3 py-2 font-normal">
-                  Total Utility by Purchase
+                <th scope="col"  title="Total de utilidades por compra en GTQ." className="px-3 py-2 font-normal">
+                  Total Utility
                 </th>
 
                 <th scope="col" className="px-3 py-2 font-normal">

@@ -50,9 +50,6 @@ export default async function BoxesTable({
                 <th scope="col" className="px-4 py-2 font-medium sm:pl-6">
                   Id
                 </th>
-                <th scope="col" className="px-4 py-2 font-medium sm:pl-6">
-                  Parent Id
-                </th>
                 <th scope="col" className="px-3 py-2 font-medium">
                   Order
                 </th>
@@ -71,8 +68,11 @@ export default async function BoxesTable({
                 <th scope="col" className="px-3 py-2 font-medium">
                   Status
                 </th>
-                <th scope="col" className="px-3 py-2 font-medium">
+               { /* <th scope="col" className="px-3 py-2 font-medium">
                   Updated Date
+                </th> */}
+                <th scope="col" className="px-4 py-2 font-medium sm:pl-6">
+                  Parent Id
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
@@ -86,9 +86,6 @@ export default async function BoxesTable({
                   className="w-full border py-3 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg hover:bg-gray-50">
                   <td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-300">
                     {category.id}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-300">
-                    {category.parentid === null ? 0 : category.parentid }
                   </td>
                   <td className="whitespace-nowrap   px-3 py-1 hover:border hover:border-blue-300">
                     {category.ordenno}
@@ -114,8 +111,11 @@ export default async function BoxesTable({
                   <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                     <CategoryStatus status={category.status} />
                   </td>
-                  <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
+                 {/* <td className="whitespace-nowrap  px-3 py-1 hover:border hover:border-blue-300">
                    {formatDateToLocal(category.updated_date)}
+                  </td>*/}
+                  <td className="whitespace-nowrap px-3 py-1 hover:border hover:border-blue-300">
+                    {category.parentid === null ? 0 : category.parentid }
                   </td>
                   <td className="whitespace-nowrap py-1 pl-6 pr-3 hover:border hover:border-blue-300">
                     <div className="flex justify-end gap-1">

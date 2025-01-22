@@ -518,6 +518,7 @@ export async function fetchFilteredPurchases ( query: string,
       WHERE
       boxes.box_id::TEXT ILIKE ${`%${query}%`} OR
       purchases.noitem::TEXT ILIKE ${`%${query}%`} OR
+      purchases.name::TEXT ILIKE ${`%${query}%`} OR
       purchases.create_date::text ILIKE ${`%${query}%`} 
       ORDER BY purchases.name asc
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
