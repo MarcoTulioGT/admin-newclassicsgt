@@ -4,7 +4,7 @@ import { inter } from '@/app/ui/fonts';
 
 
 export const metadata: Metadata = {
-  title: "Admin new-classics-gt",
+  title: "Administrado de New Classics GT",
   description: "Administracion de new classics toys GT",
 };
 
